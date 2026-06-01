@@ -1,0 +1,176 @@
+@import "tailwindcss";
+
+:root {
+  --background: #000000;
+  --foreground: #ffffff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-height: 100%;
+  scroll-behavior: smooth;
+  background: var(--background);
+}
+
+body {
+  min-height: 100%;
+  margin: 0;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+::selection {
+  background: #0b63ff;
+  color: #ffffff;
+}
+
+.grain {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 42px 42px;
+}
+
+.hero-chain {
+  background:
+    radial-gradient(ellipse at center, rgba(255, 255, 255, 0.36) 0 32%, transparent 33%) 0 0 / 92px 42px repeat-x,
+    radial-gradient(ellipse at center, rgba(255, 255, 255, 0.16) 0 28%, transparent 29%) 46px 0 / 92px 42px repeat-x;
+  filter: drop-shadow(0 14px 18px rgba(0, 0, 0, 0.65));
+}
+
+.chain-rail {
+  filter: none;
+  overflow: visible;
+  transform-origin: 50% 50%;
+}
+
+.hero-visual-mask {
+  mask-image: radial-gradient(ellipse at 68% 48%, #000 0 42%, transparent 72%);
+}
+
+.hero-chain-front-mask {
+  mask-image: linear-gradient(
+    90deg,
+    transparent 0%,
+    transparent 12%,
+    #000 15%,
+    #000 29%,
+    transparent 32%,
+    transparent 56%,
+    #000 59%,
+    #000 74%,
+    transparent 77%,
+    transparent 86%,
+    #000 89%,
+    #000 100%
+  );
+}
+
+.chain-track {
+  animation: chain-drift 11s ease-in-out infinite alternate;
+  transform-origin: 50% 50%;
+}
+
+.chain-track-reverse {
+  animation-direction: alternate-reverse;
+}
+
+.chain-link {
+  animation: link-pulse 3.8s ease-in-out infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.hero-chain-wrap {
+  filter: none;
+}
+
+.chain-glint {
+  animation: chain-glint 3.6s ease-in-out infinite;
+  mix-blend-mode: screen;
+  transform: skewX(-18deg);
+}
+
+.badge-float {
+  animation: badge-drift 9s ease-in-out infinite alternate;
+}
+
+.architecture-marquee {
+  animation: marquee 28s linear infinite;
+}
+
+@keyframes badge-drift {
+  from {
+    margin-top: -10px;
+  }
+
+  to {
+    margin-top: 18px;
+  }
+}
+
+@keyframes marquee {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@keyframes chain-drift {
+  from {
+    transform: translate3d(-22px, -3px, 0);
+  }
+
+  to {
+    transform: translate3d(22px, 4px, 0);
+  }
+}
+
+@keyframes link-pulse {
+  0%,
+  100% {
+    opacity: 0.78;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes chain-glint {
+  0% {
+    transform: translateX(-280px) skewX(-18deg);
+  }
+
+  48%,
+  100% {
+    transform: translateX(1900px) skewX(-18deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}

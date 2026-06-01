@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 800" role="img" aria-label="Minimal StayFi on-chain hospitality infrastructure illustration">
+  <defs>
+    <linearGradient id="rail" x1="120" x2="1280" y1="600" y2="210" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFFFFF" stop-opacity=".04"/>
+      <stop offset=".42" stop-color="#0B63FF" stop-opacity=".72"/>
+      <stop offset="1" stop-color="#FFFFFF" stop-opacity=".16"/>
+    </linearGradient>
+    <radialGradient id="soft" cx="68%" cy="48%" r="48%">
+      <stop stop-color="#0B63FF" stop-opacity=".16"/>
+      <stop offset="1" stop-color="#0B63FF" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="glow" x="-40%" y="-40%" width="180%" height="180%">
+      <feDropShadow dx="0" dy="0" stdDeviation="18" flood-color="#0B63FF" flood-opacity=".28"/>
+    </filter>
+  </defs>
+  <rect width="1400" height="800" fill="#000"/>
+  <rect width="1400" height="800" fill="url(#soft)"/>
+  <path d="M90 146h1220M90 266h1220M90 386h1220M90 506h1220M90 626h1220M210 70v650M430 70v650M650 70v650M870 70v650M1090 70v650" stroke="#fff" stroke-opacity=".035"/>
+  <path d="M112 616C270 508 384 554 500 430C612 310 760 346 900 254C1036 164 1164 176 1294 96" fill="none" stroke="url(#rail)" stroke-width="10" stroke-linecap="round" filter="url(#glow)"/>
+  <g fill="none" stroke="#fff" stroke-opacity=".16" stroke-width="16" stroke-linecap="round">
+    <path d="M764 344l46-28M840 298l46-28M916 250l46-28"/>
+  </g>
+  <g fill="#030303" stroke="#fff" stroke-opacity=".13">
+    <rect x="170" y="486" width="250" height="116" rx="24"/>
+    <rect x="468" y="414" width="204" height="150" rx="24"/>
+    <rect x="940" y="178" width="236" height="142" rx="28"/>
+  </g>
+  <g stroke="#0B63FF" stroke-linecap="round" filter="url(#glow)">
+    <path d="M212 546h146" stroke-width="9"/>
+    <path d="M510 472h98M510 512h68" stroke-width="8"/>
+    <circle cx="1058" cy="248" r="46" fill="none" stroke-width="8"/>
+    <path d="M1034 248h48M1058 224v48" stroke-width="8"/>
+  </g>
+  <path d="M116 690h314l54-88 46 38 58-82 42 54 72-126 48 66 96-138" fill="none" stroke="#fff" stroke-opacity=".13" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
