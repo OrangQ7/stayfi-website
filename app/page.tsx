@@ -54,6 +54,95 @@ const marketStats = [
   ["Hotels", "350", "Active properties at five-year scale"],
 ];
 
+type SeasonalDeal = {
+  id: string;
+  name: string;
+  location: string;
+  season: string;
+  status: string;
+  srnSize: string;
+  subscribed: string;
+  advanceRate: string;
+  occupancy: string;
+  projectedRevenue: string;
+  token: string;
+  minimum: string;
+  maturity: string;
+  image: string;
+  feeds: string[];
+  waterfall: string[];
+};
+
+const seasonalDeals: SeasonalDeal[] = [
+  {
+    id: "alpenstern",
+    name: "Hotel Alpenstern Zermatt",
+    location: "Zermatt, Switzerland",
+    season: "Winter 2026",
+    status: "Whitelist open",
+    srnSize: "1,200,000 USDC",
+    subscribed: "72%",
+    advanceRate: "18%",
+    occupancy: "87%",
+    projectedRevenue: "6.8M CHF",
+    token: "SRN-ALP26",
+    minimum: "25,000 USDC",
+    maturity: "Apr 30, 2026",
+    image: "/stayfi/asset-alpine-resort.png",
+    feeds: ["PMS bookings", "Stripe payouts", "Bank escrow", "Room tax trail"],
+    waterfall: ["Escrow lockbox", "Servicer reserve", "SRN settlement", "Hotel residual"],
+  },
+  {
+    id: "leman",
+    name: "Lac Leman Boutique Hotel",
+    location: "Geneva, Switzerland",
+    season: "Summer 2026",
+    status: "Funding",
+    srnSize: "760,000 USDC",
+    subscribed: "44%",
+    advanceRate: "15%",
+    occupancy: "81%",
+    projectedRevenue: "4.1M CHF",
+    token: "SRN-LEM26",
+    minimum: "10,000 USDC",
+    maturity: "Sep 15, 2026",
+    image: "/stayfi/asset-keycard-tokenization.png",
+    feeds: ["CRS pickup", "Card processor", "SPV bank feed", "Audit pack"],
+    waterfall: ["Guest receipts", "Tax reserve", "USDC payout", "Operator balance"],
+  },
+  {
+    id: "verbier",
+    name: "Maison Verbier Lodge",
+    location: "Valais, Switzerland",
+    season: "Ski 2026",
+    status: "Data room",
+    srnSize: "980,000 USDC",
+    subscribed: "18%",
+    advanceRate: "20%",
+    occupancy: "84%",
+    projectedRevenue: "5.3M CHF",
+    token: "SRN-VRB26",
+    minimum: "50,000 USDC",
+    maturity: "May 12, 2026",
+    image: "/stayfi/asset-data-widget.png",
+    feeds: ["Booking pace", "Bank statements", "Occupancy model", "SPV docs"],
+    waterfall: ["Revenue capture", "Ops reserve", "Investor ledger", "Hotel sweep"],
+  },
+];
+
+const portfolioRows = [
+  ["SRN-ALP26", "320", "Active", "Feb 28, 2026", "18,420 USDC"],
+  ["SRN-LEM26", "140", "Funding", "Jul 15, 2026", "Pending"],
+  ["SRN-VRB26", "90", "Review", "Mar 31, 2026", "Pending"],
+];
+
+const subscribeSteps = [
+  "Connect wallet",
+  "Verify KYC / accreditation",
+  "Choose USDC allocation",
+  "Mint permissioned SRNs",
+];
+
 function clamp(value: number, min = 0, max = 1) {
   return Math.min(max, Math.max(min, value));
 }
@@ -139,6 +228,7 @@ function useSectionProgress<T extends HTMLElement>() {
 
 export default function Home() {
   const scrollY = useWindowScroll();
+  const [selectedDealId, setSelectedDealId] = useState(seasonalDeals[0].id);
   const { progress: heroProgress, ref: heroRef } =
     useSectionProgress<HTMLElement>();
   const { progress: mechanismProgress, ref: mechanismRef } =
@@ -149,6 +239,9 @@ export default function Home() {
     mechanisms.length - 1,
   );
   const activeIndex = Math.round(activeFloat);
+  const selectedDeal =
+    seasonalDeals.find((deal) => deal.id === selectedDealId) ??
+    seasonalDeals[0];
 
   return (
     <main className="min-h-screen bg-black text-white">
@@ -208,6 +301,12 @@ export default function Home() {
         </div>
       </section>
 
+      <SeasonalNotesApp
+        selectedDeal={selectedDeal}
+        selectedDealId={selectedDealId}
+        setSelectedDealId={setSelectedDealId}
+      />
+
       <section
         id="mechanism"
         ref={mechanismRef}
@@ -243,6 +342,8 @@ export default function Home() {
           ))}
         </div>
       </section>
+
+      <InvestorConsole selectedDeal={selectedDeal} />
 
       <section id="market" className="mx-auto max-w-7xl px-5 py-24 sm:px-8">
         <div className="border-t border-white/12 pt-8">
@@ -301,6 +402,289 @@ export default function Home() {
         </footer>
       </section>
     </main>
+  );
+}
+
+function SeasonalNotesApp({
+  selectedDeal,
+  selectedDealId,
+  setSelectedDealId,
+}: {
+  selectedDeal: SeasonalDeal;
+  selectedDealId: string;
+  setSelectedDealId: (id: string) => void;
+}) {
+  const subscriptionProgress = Number.parseInt(selectedDeal.subscribed, 10);
+
+  return (
+    <section id="app" className="mx-auto max-w-7xl px-5 py-24 sm:px-8">
+      <div className="border-t border-white/12 pt-8">
+        <div className="grid gap-8 lg:grid-cols-[0.78fr_1fr] lg:items-end">
+          <div>
+            <p className="text-xs font-black uppercase text-[#87B7FF]">
+              Product app demo
+            </p>
+            <h2 className="mt-5 max-w-3xl text-5xl font-black leading-none text-white sm:text-7xl">
+              Live Seasonal Notes
+            </h2>
+          </div>
+          <p className="max-w-2xl text-base font-bold leading-7 text-white/52 lg:justify-self-end">
+            Browse hotel-backed SRNs, inspect PMS-verified seasonal revenue,
+            and simulate a USDC subscription flow. Demo data for product
+            illustration only.
+          </p>
+        </div>
+
+        <div className="mt-10 grid gap-4 lg:grid-cols-[0.84fr_1.16fr]">
+          <div className="space-y-3">
+            {seasonalDeals.map((deal) => {
+              const isActive = deal.id === selectedDealId;
+
+              return (
+                <button
+                  aria-pressed={isActive}
+                  className={`w-full border p-5 text-left transition ${
+                    isActive
+                      ? "border-[#0B63FF] bg-[#0B63FF]/12 shadow-[0_0_70px_rgba(11,99,255,0.18)]"
+                      : "border-white/12 bg-white/[0.025] hover:border-white/28"
+                  }`}
+                  key={deal.id}
+                  onClick={() => setSelectedDealId(deal.id)}
+                  type="button"
+                >
+                  <div className="flex items-start justify-between gap-5">
+                    <div>
+                      <p className="text-[11px] font-black uppercase text-white/42">
+                        {deal.location}
+                      </p>
+                      <h3 className="mt-3 text-2xl font-black leading-none text-white">
+                        {deal.name}
+                      </h3>
+                    </div>
+                    <span className="shrink-0 border border-white/14 px-3 py-2 text-[11px] font-black uppercase text-[#E0FFB3]">
+                      {deal.status}
+                    </span>
+                  </div>
+                  <div className="mt-7 grid grid-cols-3 gap-3 text-sm">
+                    <DealMiniStat label="Size" value={deal.srnSize} />
+                    <DealMiniStat label="Season" value={deal.season} />
+                    <DealMiniStat label="Filled" value={deal.subscribed} />
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+
+          <div className="border border-white/12 bg-[#050505] p-4 sm:p-6">
+            <div className="grid gap-6 lg:grid-cols-[0.86fr_1fr]">
+              <div className="relative min-h-72 overflow-hidden border border-white/10 bg-black">
+                <Image
+                  alt={`${selectedDeal.name} asset preview`}
+                  className="object-cover opacity-72"
+                  fill
+                  sizes="(min-width: 1024px) 38vw, 100vw"
+                  src={selectedDeal.image}
+                  unoptimized
+                />
+                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black via-black/70 to-transparent p-5">
+                  <p className="text-[11px] font-black uppercase text-white/46">
+                    {selectedDeal.token}
+                  </p>
+                  <p className="mt-2 text-3xl font-black leading-none text-white">
+                    {selectedDeal.name}
+                  </p>
+                </div>
+              </div>
+
+              <div>
+                <div className="flex flex-wrap items-center gap-3">
+                  <span className="border border-[#E0FFB3]/50 bg-[#E0FFB3]/10 px-3 py-2 text-[11px] font-black uppercase text-[#E0FFB3]">
+                    {selectedDeal.status}
+                  </span>
+                  <span className="border border-white/12 px-3 py-2 text-[11px] font-black uppercase text-white/52">
+                    ERC-3643 permissioned
+                  </span>
+                </div>
+                <h3 className="mt-6 text-4xl font-black leading-none text-white sm:text-5xl">
+                  {selectedDeal.season} revenue note
+                </h3>
+                <div className="mt-6 grid grid-cols-2 gap-3">
+                  <DealMetric label="SRN size" value={selectedDeal.srnSize} />
+                  <DealMetric
+                    label="Advance rate"
+                    value={selectedDeal.advanceRate}
+                  />
+                  <DealMetric
+                    label="Forecast occupancy"
+                    value={selectedDeal.occupancy}
+                  />
+                  <DealMetric
+                    label="Projected revenue"
+                    value={selectedDeal.projectedRevenue}
+                  />
+                </div>
+                <div className="mt-6">
+                  <div className="flex items-center justify-between text-xs font-black uppercase text-white/44">
+                    <span>Subscription progress</span>
+                    <span>{selectedDeal.subscribed}</span>
+                  </div>
+                  <div className="mt-3 h-2 bg-white/10">
+                    <div
+                      className="h-full bg-[#E0FFB3]"
+                      style={{ width: `${subscriptionProgress}%` }}
+                    />
+                  </div>
+                </div>
+                <div className="mt-6 grid gap-3 sm:grid-cols-2">
+                  <button
+                    className="h-12 bg-white px-5 text-sm font-black uppercase text-black transition hover:bg-[#E0FFB3]"
+                    type="button"
+                  >
+                    Simulate subscribe
+                  </button>
+                  <button
+                    className="h-12 border border-white/18 px-5 text-sm font-black uppercase text-white/72 transition hover:border-white/40"
+                    type="button"
+                  >
+                    Open data room
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-6 grid gap-4 lg:grid-cols-2">
+              <InfoList title="Verified feeds" values={selectedDeal.feeds} />
+              <InfoList title="Escrow waterfall" values={selectedDeal.waterfall} />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function DealMiniStat({ label, value }: { label: string; value: string }) {
+  return (
+    <div>
+      <p className="text-[10px] font-black uppercase text-white/34">{label}</p>
+      <p className="mt-2 truncate font-black text-white/78">{value}</p>
+    </div>
+  );
+}
+
+function DealMetric({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="border border-white/10 bg-white/[0.025] p-4">
+      <p className="text-[10px] font-black uppercase text-white/36">{label}</p>
+      <p className="mt-3 text-xl font-black text-white">{value}</p>
+    </div>
+  );
+}
+
+function InfoList({ title, values }: { title: string; values: string[] }) {
+  return (
+    <div className="border border-white/10 bg-black/50 p-5">
+      <p className="text-xs font-black uppercase text-white/42">{title}</p>
+      <div className="mt-4 space-y-3">
+        {values.map((value, index) => (
+          <div className="flex items-center gap-3" key={value}>
+            <span className="grid h-6 w-6 shrink-0 place-items-center border border-white/12 text-[10px] font-black text-[#87B7FF]">
+              {index + 1}
+            </span>
+            <p className="text-sm font-bold text-white/68">{value}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function InvestorConsole({ selectedDeal }: { selectedDeal: SeasonalDeal }) {
+  return (
+    <section className="mx-auto max-w-7xl px-5 py-24 sm:px-8">
+      <div className="grid gap-4 lg:grid-cols-[0.9fr_1.1fr]">
+        <div className="border border-white/12 bg-[#050505] p-5 sm:p-6">
+          <p className="text-xs font-black uppercase text-[#87B7FF]">
+            Investor console
+          </p>
+          <h2 className="mt-5 text-5xl font-black leading-none text-white sm:text-6xl">
+            Portfolio and settlement view
+          </h2>
+          <div className="mt-8 grid gap-3 sm:grid-cols-2">
+            <DealMetric label="Portfolio value" value="1,840,000 USDC" />
+            <DealMetric label="Active SRNs" value="4 notes" />
+            <DealMetric label="Next settlement" value="Feb 28, 2026" />
+            <DealMetric label="Pending payout" value="42,800 USDC" />
+          </div>
+          <div className="mt-6 overflow-hidden border border-white/10">
+            {portfolioRows.map(([asset, tokens, status, payment, payout]) => (
+              <div
+                className="grid grid-cols-[1fr_0.6fr_0.8fr] gap-4 border-b border-white/10 p-4 text-sm last:border-b-0 sm:grid-cols-[1fr_0.5fr_0.6fr_0.8fr_0.8fr]"
+                key={asset}
+              >
+                <span className="font-black text-white">{asset}</span>
+                <span className="text-white/54">{tokens}</span>
+                <span className="font-bold text-[#E0FFB3]">{status}</span>
+                <span className="hidden text-white/54 sm:block">{payment}</span>
+                <span className="hidden text-white/54 sm:block">{payout}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="grid gap-4">
+          <div className="border border-white/12 bg-[#050505] p-5 sm:p-6">
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <p className="text-xs font-black uppercase text-white/42">
+                  Subscribe flow
+                </p>
+                <h3 className="mt-4 text-3xl font-black leading-none text-white">
+                  {selectedDeal.token} allocation
+                </h3>
+              </div>
+              <span className="border border-[#E0FFB3]/50 px-3 py-2 text-xs font-black uppercase text-[#E0FFB3]">
+                {selectedDeal.minimum} min
+              </span>
+            </div>
+            <div className="mt-7 grid gap-3 sm:grid-cols-4">
+              {subscribeSteps.map((step, index) => (
+                <div className="border border-white/10 bg-white/[0.025] p-4" key={step}>
+                  <p className="text-xl font-black text-[#87B7FF]">
+                    0{index + 1}
+                  </p>
+                  <p className="mt-5 text-sm font-black leading-5 text-white">
+                    {step}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="border border-white/12 bg-[#050505] p-5 sm:p-6">
+            <p className="text-xs font-black uppercase text-white/42">
+              Compliance boundary
+            </p>
+            <div className="mt-5 grid gap-3 sm:grid-cols-3">
+              {["Reg D / Reg S", "SPV per deal", "No demand guarantee"].map(
+                (item) => (
+                  <div
+                    className="border border-white/10 bg-black/60 p-4 text-sm font-black uppercase text-white/68"
+                    key={item}
+                  >
+                    {item}
+                  </div>
+                ),
+              )}
+            </div>
+            <p className="mt-5 text-sm font-bold leading-6 text-white/46">
+              SRNs represent seasonal revenue participation rights, not hotel
+              equity. Figures shown are illustrative demo data.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
   );
 }
 
