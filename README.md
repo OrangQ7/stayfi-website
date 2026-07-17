@@ -6,7 +6,7 @@ StayFi turns a hotel's seasonal revenue package into an evidence-backed underwri
 
 The pre-hackathon product was the public StayFi protocol website. The Build Week extension adds a GPT-5.6 underwriting workflow, human review checkpoints, structured evidence, and a four-screen demonstration journey.
 
-## Day 0 status
+## Build Week status
 
 - Existing StayFi website preserved from baseline commit `443b3c6`.
 - Four demo routes are available:
@@ -18,6 +18,7 @@ The pre-hackathon product was the public StayFi protocol website. The Build Week
 - Synthetic source package: `public/demo-data/`
 - Frozen three-minute flow: `docs/DEMO-SCRIPT.md`
 - Pre-hackathon baseline record: `docs/HACKATHON-BASELINE.md`
+- Day 1 adds real multipart uploads, SHA-256 source manifests, GPT-5.6 file inputs, strict Structured Outputs, runtime validation, and browser-session handoff to the underwriting screen.
 
 ## Run locally
 
@@ -37,7 +38,9 @@ OPENAI_API_KEY=...
 OPENAI_MODEL=gpt-5.6
 ```
 
-Never commit `.env.local`. The current Day 0 routes use deterministic synthetic output; the next implementation step connects the schema to the OpenAI Responses API with GPT-5.6.
+Never commit `.env.local`. The underwriting service uses the OpenAI Responses API with `store: false`, explicit `reasoning.effort: "medium"`, and the `gpt-5.6` family alias, which routes to GPT-5.6 Sol. Uploaded files are limited to 8 files, 2 MB each, and 4 MB total for the Day 1 demo.
+
+For local integration testing without an API request, set `OPENAI_MOCK_MODE=1`. Mock results are visibly labelled and this mode is off by default.
 
 ## Important disclaimer
 

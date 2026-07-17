@@ -57,3 +57,55 @@ export type UnderwritingDossier = {
   review_required: boolean;
   investor_summary: string;
 };
+
+export type UnderwritingRunMeta = {
+  source: "openai" | "mock";
+  model: string;
+  response_id: string;
+  latency_ms: number;
+  files: Array<{
+    name: string;
+    size: number;
+    sha256: string;
+  }>;
+  usage?: {
+    input_tokens: number;
+    output_tokens: number;
+    total_tokens: number;
+  };
+};
+
+export type StoredUnderwritingRun = {
+  dossier: UnderwritingDossier;
+  meta: UnderwritingRunMeta;
+};
+
+export function underwritingStorageKey(dealId: string) {
+  return `stayfi:underwriting:${dealId}`;
+}
+
+export function isUnderwritingDossier(value: unknown): value is UnderwritingDossier {
+  if (!value || typeof value !== "object") return false;
+
+  const candidate = value as Partial<UnderwritingDossier>;
+  return (
+    typeof candidate.deal_id === "string" &&
+    typeof candidate.synthetic === "boolean" &&
+    !!candidate.hotel_profile &&
+    typeof candidate.hotel_profile.name === "string" &&
+    typeof candidate.hotel_profile.rooms === "number" &&
+    Array.isArray(candidate.source_files) &&
+    !!candidate.normalized_metrics &&
+    typeof candidate.normalized_metrics.forward_booked_revenue === "number" &&
+    Array.isArray(candidate.evidence) &&
+    Array.isArray(candidate.missing_data) &&
+    Array.isArray(candidate.discrepancies) &&
+    Array.isArray(candidate.risk_flags) &&
+    typeof candidate.risk_band === "string" &&
+    typeof candidate.confidence === "number" &&
+    !!candidate.recommended_terms &&
+    typeof candidate.recommended_terms.funding_amount_usdc === "number" &&
+    typeof candidate.review_required === "boolean" &&
+    typeof candidate.investor_summary === "string"
+  );
+}
