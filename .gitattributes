@@ -1,0 +1,5 @@
+# Evaluation source hashes must be stable across Windows and Linux deployments.
+public/eval-data/fjordlight-complex/*.csv binary
+public/eval-data/fjordlight-complex/*.pdf binary
+public/eval-data/fjordlight-complex/*.xlsx binary
+public/eval-data/fjordlight-complex/*.docx binary

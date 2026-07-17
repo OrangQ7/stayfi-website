@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { EvaluationReport } from "@/components/evaluation-report";
 import { Metric, PageIntro } from "@/components/workspace-shell";
 import type { UnderwritingDossier } from "@/lib/underwriting-schema";
 import { useStoredUnderwritingRun } from "@/lib/use-stored-underwriting-run";
@@ -73,6 +74,8 @@ export function UnderwritingResult({ dealId, fallback }: { dealId: string; fallb
           </div>
         </div>
       ) : null}
+
+      <EvaluationReport dossier={dossier} />
 
       <div className="mt-8 grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
         <section className="border border-white/10 bg-white/[0.02] p-6 sm:p-7">

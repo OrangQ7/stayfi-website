@@ -1,0 +1,7 @@
+synthetic,settlement_month,gross_room_sales_usdc,commission_usdc,refunds_usdc,chargebacks_usdc,net_settlement_usdc,status,locator
+true,2027-11,500000,90000,10000,0,400000,settled,OTA statement Nov
+true,2027-12,700000,126000,15000,0,559000,settled,OTA statement Dec
+true,2028-01,800000,144000,20000,42000,594000,disputed chargeback open,OTA statement Jan dispute D-8821
+true,2028-02,760000,136800,20000,0,603200,settled,OTA statement Feb
+true,2028-03,640000,115200,20000,0,504800,settled,OTA statement Mar
+true,CONTROL TOTAL,3400000,612000,85000,42000,2661000,one dispute open,verified control total

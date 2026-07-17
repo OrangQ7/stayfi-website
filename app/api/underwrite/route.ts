@@ -27,6 +27,16 @@ const acceptedExtensions = new Set([
   ".xls",
   ".docx",
 ]);
+const mimeTypes: Record<string, string> = {
+  ".pdf": "application/pdf",
+  ".csv": "text/csv",
+  ".json": "application/json",
+  ".txt": "text/plain",
+  ".md": "text/markdown",
+  ".xlsx": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  ".xls": "application/vnd.ms-excel",
+  ".docx": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+};
 
 type PreparedFile = {
   file: File;
@@ -38,6 +48,13 @@ type PreparedFile = {
 function extensionOf(fileName: string) {
   const dot = fileName.lastIndexOf(".");
   return dot >= 0 ? fileName.slice(dot).toLowerCase() : "";
+}
+
+function mimeTypeOf(file: File) {
+  const supplied = file.type.trim().toLowerCase();
+  return supplied && supplied !== "application/octet-stream"
+    ? supplied
+    : mimeTypes[extensionOf(file.name)] || "application/octet-stream";
 }
 
 function requestIdentity(request: Request) {
@@ -247,7 +264,7 @@ export async function POST(request: Request) {
       ...preparedFiles.map(({ file, bytes }) => ({
         type: "input_file" as const,
         filename: file.name,
-        file_data: `data:${file.type || "application/octet-stream"};base64,${bytes.toString("base64")}`,
+        file_data: `data:${mimeTypeOf(file)};base64,${bytes.toString("base64")}`,
       })),
       { type: "input_text" as const, text: buildPrompt(preparedFiles) },
     ];

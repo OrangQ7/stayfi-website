@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "verify:openai": "node scripts/verify-openai.mjs"
+    "verify:openai": "node scripts/verify-openai.mjs",
+    "eval:fjordlight": "node scripts/verify-fjordlight-evaluation.mjs"
   },
   "dependencies": {
     "next": "^16.2.6",

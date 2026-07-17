@@ -1,0 +1,91 @@
+{
+  "case_id": "fjordlight-2027-28-winter",
+  "case_name": "Fjordlight Grand Hotel — Winter 2027/28 complex package",
+  "synthetic": true,
+  "human_answer_version": "1.0",
+  "expected_profile": {
+    "name": "Fjordlight Grand Hotel",
+    "location_any": ["Tromso, Norway", "Tromsø, Norway"],
+    "rooms": 96,
+    "season_start": "2027-11-01",
+    "season_end": "2028-03-31"
+  },
+  "expected_metrics": {
+    "currency": "USDC",
+    "forward_booked_revenue": 5600000,
+    "historical_pms_revenue": 5200000,
+    "verified_bank_inflow": 4784000,
+    "occupancy_rate": 0.8100328947368421,
+    "bank_reconciliation_gap_pct": 8
+  },
+  "expected_terms": {
+    "funding_amount_usdc": 612000,
+    "face_value_usdc": 720000,
+    "discount_pct": 15,
+    "revenue_share_pct": 8,
+    "maturity_date": "2028-04-30"
+  },
+  "acceptable_risk_bands": ["B-", "C"],
+  "review_required": true,
+  "expected_source_files": [
+    { "file_name": "fjordlight-property-profile.pdf", "sha256": "a36b870cc167d98bb3d3cdd64aa028819b214b134765bcec00b5b67ce4f3ed6c" },
+    { "file_name": "fjordlight-pms-export.xlsx", "sha256": "a0ba5349d8737214f0fd8916f0cb1fd264819c58578c2873afc8b79c9a43f1c2" },
+    { "file_name": "fjordlight-bank-ledger.csv", "sha256": "521372cf9b96a24fdd7434f2c6990825f0e11d3575f21edbe811f87cc5ff6ab6" },
+    { "file_name": "fjordlight-ota-settlements.csv", "sha256": "f3a82f7bb1b14c997f93d39edc0f90a9d40b60209f8b4e500294f7b4216ec21a" },
+    { "file_name": "fjordlight-financing-request.docx", "sha256": "547bb4c47966cb64f9e3d68d231337de89afb0fa752892efec0baab23149d8ad" },
+    { "file_name": "fjordlight-insurance-scan.pdf", "sha256": "853924d676f08c72055d866ce687e2cdf43ab018bcc95f1d607e23546dbab535" }
+  ],
+  "required_discrepancies": [
+    {
+      "id": "duplicate_booking",
+      "label": "Duplicate booking BKG-3118",
+      "all": ["bkg-3118"],
+      "any": ["duplicate", "appears twice", "repeated"]
+    },
+    {
+      "id": "room_count_conflict",
+      "label": "96 sellable rooms versus 100 requested revenue rooms",
+      "all": ["96", "100"],
+      "any": ["room", "inventory", "sellable"]
+    },
+    {
+      "id": "bank_gap",
+      "label": "8% PMS-to-bank reconciliation gap",
+      "all": ["8"],
+      "any": ["bank", "reconciliation", "inflow", "pms"]
+    },
+    {
+      "id": "insurance_expiry",
+      "label": "Insurance expires before the underwritten season",
+      "all": ["insurance"],
+      "any": ["expire", "expiry", "renewal", "2027-10-31"]
+    },
+    {
+      "id": "ota_chargeback",
+      "label": "January OTA chargeback of 42,000 USDC remains disputed",
+      "all": ["42000"],
+      "any": ["chargeback", "dispute", "ota"]
+    }
+  ],
+  "required_missing_data": [
+    {
+      "id": "insurance_renewal",
+      "label": "Current insurance renewal certificate or binder",
+      "all": ["insurance"],
+      "any": ["renewal", "certificate", "binder"]
+    },
+    {
+      "id": "audited_financials",
+      "label": "FY2026 audited financial statements",
+      "all": ["2026"],
+      "any": ["audit", "audited", "financial statement"]
+    }
+  ],
+  "minimum_evidence_count": 6,
+  "tolerances": {
+    "money_absolute": 1,
+    "occupancy_absolute": 0.001,
+    "percentage_absolute": 0.1
+  },
+  "scoring_note": "This is a human-authored deterministic evaluation target. It measures extraction and auditability, not investment approval or model confidence."
+}

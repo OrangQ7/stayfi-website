@@ -1,0 +1,19 @@
+{
+  "case_id": "fjordlight-2027-28-winter",
+  "synthetic": true,
+  "purpose": "Complex software evaluation package for StayFi underwriting. No real hotel, guest, insurer, bank account, or investment is represented.",
+  "files": [
+    "fjordlight-property-profile.pdf",
+    "fjordlight-pms-export.xlsx",
+    "fjordlight-bank-ledger.csv",
+    "fjordlight-ota-settlements.csv",
+    "fjordlight-financing-request.docx",
+    "fjordlight-insurance-scan.pdf"
+  ],
+  "authoritative_controls": {
+    "forward_revenue_source": "PMS Monthly sheet, net booked revenue control total",
+    "historical_reconciliation_source": "Bank ledger PMS lodging revenue and verified lodging inflow control totals",
+    "sellable_room_source": "Property profile; staff rooms are excluded"
+  },
+  "expected_human_review": true
+}

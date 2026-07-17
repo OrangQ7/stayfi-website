@@ -17,6 +17,15 @@ const sampleFiles = [
   { name: "financing-request.json", type: "Financing request", detail: "352,000 USDC requested", href: "/demo-data/financing-request.json" },
 ];
 
+const complexEvaluationFiles = [
+  { name: "fjordlight-property-profile.pdf", href: "/eval-data/fjordlight-complex/fjordlight-property-profile.pdf" },
+  { name: "fjordlight-pms-export.xlsx", href: "/eval-data/fjordlight-complex/fjordlight-pms-export.xlsx" },
+  { name: "fjordlight-bank-ledger.csv", href: "/eval-data/fjordlight-complex/fjordlight-bank-ledger.csv" },
+  { name: "fjordlight-ota-settlements.csv", href: "/eval-data/fjordlight-complex/fjordlight-ota-settlements.csv" },
+  { name: "fjordlight-financing-request.docx", href: "/eval-data/fjordlight-complex/fjordlight-financing-request.docx" },
+  { name: "fjordlight-insurance-scan.pdf", href: "/eval-data/fjordlight-complex/fjordlight-insurance-scan.pdf" },
+];
+
 type RunStatus = "idle" | "preparing" | "analyzing" | "error";
 
 type ApiErrorResponse = {
@@ -92,17 +101,17 @@ export function OriginationWorkspace() {
     }
   }
 
-  async function runSyntheticPackage() {
+  async function loadPreparedPackage(entries: Array<{ name: string; href: string }>) {
     setStatus("preparing");
     setError(null);
 
     try {
       const files = await Promise.all(
-        sampleFiles.map(async (sample) => {
+        entries.map(async (sample) => {
           const response = await fetch(sample.href);
           if (!response.ok) throw new Error(`Could not load ${sample.name}`);
           const blob = await response.blob();
-          return new File([blob], sample.name, { type: blob.type || (sample.name.endsWith(".csv") ? "text/csv" : "application/json") });
+          return new File([blob], sample.name, { type: blob.type || "application/octet-stream" });
         }),
       );
       setSelectedFiles(files);
@@ -111,6 +120,14 @@ export function OriginationWorkspace() {
       setError({ code: "SAMPLE_LOAD_FAILED", message: caught instanceof Error ? caught.message : "The sample package could not be loaded." });
       setStatus("error");
     }
+  }
+
+  async function runSyntheticPackage() {
+    await loadPreparedPackage(sampleFiles);
+  }
+
+  async function runComplexEvaluation() {
+    await loadPreparedPackage(complexEvaluationFiles);
   }
 
   function handleFiles(list: FileList | null) {
@@ -184,6 +201,17 @@ export function OriginationWorkspace() {
               </div>
             ) : null}
           </div>
+
+          <div className="mt-5 border border-amber-300/25 bg-amber-300/10 p-5">
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <div>
+                <p className="text-xs font-black uppercase tracking-[0.12em] text-amber-200">Complex evaluation package</p>
+                <p className="mt-2 text-sm font-black">Fjordlight · 6 files · PDF/XLSX/CSV/DOCX/scanned PDF</p>
+                <p className="mt-1 text-xs leading-5 text-white/45">Includes duplicate bookings, conflicting room counts, an 8% bank gap, disputed OTA chargeback, expired insurance, and missing audited statements.</p>
+              </div>
+              <a className="text-xs font-black uppercase text-amber-100 underline underline-offset-4" href="/eval-data/fjordlight-complex/manifest.json">Inspect manifest</a>
+            </div>
+          </div>
         </section>
 
         <aside className="border border-[#0B63FF]/40 bg-[#0B63FF]/10 p-6 sm:p-7">
@@ -212,6 +240,15 @@ export function OriginationWorkspace() {
             type="button"
           >
             Analyze selected files
+          </button>
+
+          <button
+            className="mt-3 flex min-h-14 w-full items-center justify-center border border-amber-200/40 bg-amber-200/10 px-5 text-center text-xs font-black uppercase tracking-[0.06em] text-amber-100 transition enabled:hover:bg-amber-100 enabled:hover:text-black disabled:cursor-wait disabled:opacity-45"
+            disabled={busy}
+            onClick={runComplexEvaluation}
+            type="button"
+          >
+            Run complex stress test + auto-score
           </button>
 
           <p aria-live="polite" className="mt-4 text-center text-[11px] leading-5 text-white/38">
