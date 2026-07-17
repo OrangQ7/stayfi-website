@@ -3,14 +3,17 @@ import { UnderwritingResult } from "@/components/underwriting-result";
 import { WorkspaceShell } from "@/components/workspace-shell";
 import type { UnderwritingDossier } from "@/lib/underwriting-schema";
 
-const fallback = dossierJson as UnderwritingDossier;
+const frozenDemo = dossierJson as UnderwritingDossier;
 
 export default async function UnderwritingPage({ params }: { params: Promise<{ dealId: string }> }) {
   const { dealId } = await params;
 
   return (
-    <WorkspaceShell active="underwriting">
-      <UnderwritingResult dealId={dealId} fallback={fallback} />
+    <WorkspaceShell active="underwriting" dealId={dealId}>
+      <UnderwritingResult
+        dealId={dealId}
+        fallback={dealId === frozenDemo.deal_id ? frozenDemo : null}
+      />
     </WorkspaceShell>
   );
 }

@@ -1,20 +1,33 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 
-const stages = [
-  { id: "originate", label: "01 Originate", href: "/originate" },
-  { id: "underwriting", label: "02 Underwrite", href: "/underwriting/alpenstern-2026-winter" },
-  { id: "notes", label: "03 Note terms", href: "/notes/alpenstern-2026-winter" },
-  { id: "portfolio", label: "04 Portfolio", href: "/portfolio" }
+const stageLabels = [
+  { id: "originate", label: "01 Originate" },
+  { id: "underwriting", label: "02 Underwrite" },
+  { id: "notes", label: "03 Note terms" },
+  { id: "portfolio", label: "04 Portfolio" },
 ] as const;
 
 export function WorkspaceShell({
   active,
+  dealId = "alpenstern-2026-winter",
   children,
 }: {
-  active: (typeof stages)[number]["id"];
+  active: (typeof stageLabels)[number]["id"];
+  dealId?: string;
   children: ReactNode;
 }) {
+  const stages = stageLabels.map((stage) => ({
+    ...stage,
+    href:
+      stage.id === "originate"
+        ? "/originate"
+        : stage.id === "underwriting"
+          ? `/underwriting/${dealId}`
+          : stage.id === "notes"
+            ? `/notes/${dealId}`
+            : `/portfolio/${dealId}`,
+  }));
   return (
     <main className="min-h-screen bg-[#050505] text-white">
       <header className="border-b border-white/10 bg-black/80 backdrop-blur-xl">

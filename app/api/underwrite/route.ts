@@ -146,6 +146,23 @@ Verified upload manifest:
 ${JSON.stringify(manifest, null, 2)}`;
 }
 
+function assertSourceManifestMatches(dossier: UnderwritingDossier, files: PreparedFile[]) {
+  const expected = new Map(files.map(({ file, sha256 }) => [file.name, sha256]));
+  const returned = new Map(dossier.source_files.map((source) => [source.file_name, source.sha256]));
+
+  const exactMatch =
+    expected.size === returned.size &&
+    [...expected].every(([fileName, sha256]) => returned.get(fileName) === sha256);
+
+  if (!exactMatch) {
+    throw new UnderwritingRequestError(
+      "SOURCE_MANIFEST_MISMATCH",
+      "The model result did not match the uploaded file manifest. No dossier was accepted; please run the package again.",
+      502,
+    );
+  }
+}
+
 function classifyOpenAIError(error: unknown) {
   if (error instanceof UnderwritingRequestError) return error;
 
@@ -204,7 +221,7 @@ export async function POST(request: Request) {
     const preparedFiles = await prepareFiles(files);
     const fileMeta = preparedFiles.map(({ file, sha256 }) => ({ name: file.name, size: file.size, sha256 }));
 
-    if (process.env.OPENAI_MOCK_MODE === "1") {
+    if (process.env.OPENAI_MOCK_MODE === "1" && process.env.NODE_ENV !== "production") {
       const dossier = dossierFixture as UnderwritingDossier;
       const meta: UnderwritingRunMeta = {
         source: "mock",
@@ -268,6 +285,7 @@ export async function POST(request: Request) {
     if (!isUnderwritingDossier(dossier)) {
       throw new UnderwritingRequestError("INVALID_MODEL_OUTPUT", "GPT-5.6 returned an invalid underwriting dossier.", 502);
     }
+    assertSourceManifestMatches(dossier, preparedFiles);
 
     const meta: UnderwritingRunMeta = {
       source: "openai",
@@ -284,7 +302,10 @@ export async function POST(request: Request) {
         : undefined,
     };
 
-    return Response.json({ ok: true, dossier, meta });
+    return Response.json(
+      { ok: true, dossier, meta },
+      { headers: { "Cache-Control": "no-store, max-age=0" } },
+    );
   } catch (error) {
     const classified = classifyOpenAIError(error);
     return Response.json(

@@ -1,42 +1,33 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useSyncExternalStore } from "react";
 import { Metric, PageIntro } from "@/components/workspace-shell";
-import {
-  isUnderwritingDossier,
-  underwritingStorageKey,
-  type StoredUnderwritingRun,
-  type UnderwritingDossier,
-} from "@/lib/underwriting-schema";
+import type { UnderwritingDossier } from "@/lib/underwriting-schema";
+import { useStoredUnderwritingRun } from "@/lib/use-stored-underwriting-run";
 
 const money = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 });
 
-function readStoredRun(raw: string | null): StoredUnderwritingRun | null {
-  try {
-    if (!raw) return null;
-    const parsed = JSON.parse(raw) as StoredUnderwritingRun;
-    if (!isUnderwritingDossier(parsed.dossier) || !parsed.meta) return null;
-    return parsed;
-  } catch {
-    return null;
-  }
-}
-
-function subscribeToSessionStorage() {
-  return () => undefined;
-}
-
-export function UnderwritingResult({ dealId, fallback }: { dealId: string; fallback: UnderwritingDossier }) {
-  const storedValue = useSyncExternalStore(
-    subscribeToSessionStorage,
-    () => sessionStorage.getItem(underwritingStorageKey(dealId)),
-    () => null,
-  );
-  const storedRun = useMemo(() => readStoredRun(storedValue), [storedValue]);
-
+export function UnderwritingResult({ dealId, fallback }: { dealId: string; fallback: UnderwritingDossier | null }) {
+  const { run: storedRun, ready } = useStoredUnderwritingRun(dealId);
   const dossier = storedRun?.dossier ?? fallback;
   const meta = storedRun?.meta;
+
+  if (!ready) {
+    return <section className="mx-auto max-w-7xl px-5 py-20 text-sm text-white/55 sm:px-8">Loading this underwriting run…</section>;
+  }
+
+  if (!dossier) {
+    return (
+      <section className="mx-auto max-w-3xl px-5 py-20 sm:px-8">
+        <div className="border border-rose-300/35 bg-rose-300/10 p-7">
+          <p className="text-xs font-black uppercase tracking-[0.12em] text-rose-200">Run data unavailable</p>
+          <h1 className="mt-4 text-3xl font-black">This page will not substitute the frozen demo.</h1>
+          <p className="mt-4 text-sm leading-6 text-white/65">The uploaded result is stored only in this browser tab. It may have been opened in another tab or cleared. Run the files again to rebuild the dossier.</p>
+          <Link className="mt-6 inline-block bg-white px-5 py-3 text-xs font-black uppercase text-black" href="/originate">Return to upload</Link>
+        </div>
+      </section>
+    );
+  }
   const gap = dossier.normalized_metrics.bank_reconciliation_gap_pct;
   const fundingRatio = dossier.normalized_metrics.forward_booked_revenue > 0
     ? (dossier.recommended_terms.funding_amount_usdc / dossier.normalized_metrics.forward_booked_revenue) * 100
@@ -70,10 +61,16 @@ export function UnderwritingResult({ dealId, fallback }: { dealId: string; fallb
       {meta ? (
         <div className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-2 border border-white/10 bg-white/[0.02] px-4 py-3 text-[11px] text-white/42">
           <span className="font-black uppercase text-white/65">Run evidence</span>
+          <span className="font-bold text-emerald-300">Manifest verified</span>
           <span>{meta.files.length} uploaded files</span>
           {meta.usage ? <span>{meta.usage.total_tokens.toLocaleString()} total tokens</span> : null}
           <span>Response storage disabled</span>
           <Link className="ml-auto font-black uppercase text-[#75A7FF] hover:text-white" href="/originate">Run another package</Link>
+          <div className="flex basis-full flex-wrap gap-2 border-t border-white/10 pt-3">
+            {meta.files.map((file) => (
+              <span className="border border-white/10 bg-black/40 px-2 py-1 text-white/55" key={file.sha256}>{file.name}</span>
+            ))}
+          </div>
         </div>
       ) : null}
 
