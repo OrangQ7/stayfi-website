@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 
 type Mechanism = {
@@ -247,16 +248,15 @@ export default function Home() {
     <main className="min-h-screen bg-black text-white">
       <header className="fixed left-0 top-0 z-50 w-full border-b border-white/10 bg-black/72 backdrop-blur-xl">
         <nav className="mx-auto flex h-14 max-w-7xl items-center justify-between px-5 sm:px-8">
-          <div className="flex items-center gap-2 text-sm font-black lowercase">
+          <Link className="flex items-center gap-2 text-sm font-black lowercase" href="/">
             <span className="grid h-5 w-5 place-items-center rounded-full border border-white/70 text-[10px] leading-none text-white">
               s
             </span>
             stayfi
-          </div>
-          <div className="hidden items-center gap-7 text-xs font-bold uppercase text-white/52 sm:flex">
-            <span>Join us</span>
-            <span>Docs</span>
-            <span>Access</span>
+          </Link>
+          <div className="flex items-center gap-3 text-xs font-bold uppercase sm:gap-6">
+            <Link className="hidden text-white/52 transition hover:text-white sm:block" href="/portfolio">Portfolio</Link>
+            <Link className="bg-[#0B63FF] px-4 py-2 text-white transition hover:bg-white hover:text-black" href="/originate">Launch demo</Link>
           </div>
         </nav>
       </header>
@@ -298,6 +298,12 @@ export default function Home() {
           >
             Turn booked seasonal revenue into liquid on-chain notes.
           </h1>
+          <Link
+            className="mt-9 inline-flex min-h-14 items-center bg-[#0B63FF] px-6 text-sm font-black uppercase tracking-[0.06em] text-white transition hover:bg-white hover:text-black"
+            href="/originate"
+          >
+            Launch underwriting demo →
+          </Link>
         </div>
       </section>
 

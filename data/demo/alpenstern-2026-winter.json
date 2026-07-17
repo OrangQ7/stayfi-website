@@ -1,0 +1,51 @@
+{
+  "deal_id": "alpenstern-2026-winter",
+  "synthetic": true,
+  "hotel_profile": {
+    "name": "Hotel Alpenstern",
+    "location": "Zermatt, Switzerland",
+    "rooms": 48,
+    "season_start": "2026-12-01",
+    "season_end": "2027-03-31"
+  },
+  "source_files": [
+    { "file_name": "hotel-profile.json", "category": "hotel_profile", "sha256": "1111111111111111111111111111111111111111111111111111111111111111", "synthetic": true },
+    { "file_name": "pms-bookings.csv", "category": "pms", "sha256": "2222222222222222222222222222222222222222222222222222222222222222", "synthetic": true },
+    { "file_name": "bank-revenue.csv", "category": "bank", "sha256": "3333333333333333333333333333333333333333333333333333333333333333", "synthetic": true },
+    { "file_name": "financing-request.json", "category": "financing_request", "sha256": "4444444444444444444444444444444444444444444444444444444444444444", "synthetic": true }
+  ],
+  "normalized_metrics": {
+    "currency": "USDC",
+    "forward_booked_revenue": 4250000,
+    "historical_pms_revenue": 3840000,
+    "verified_bank_inflow": 3532800,
+    "occupancy_rate": 0.81,
+    "bank_reconciliation_gap_pct": 8
+  },
+  "evidence": [
+    { "claim": "Forward bookings total 4.25M USDC-equivalent.", "file_name": "pms-bookings.csv", "locator": "rows 2-5, gross_booked_revenue", "excerpt": "985000 + 1120000 + 1190000 + 955000" },
+    { "claim": "Historical verified inflows are 8% below PMS revenue.", "file_name": "bank-revenue.csv", "locator": "rows 2-5, verified_lodging_inflow", "excerpt": "3532800 verified against 3840000 PMS revenue" },
+    { "claim": "The hotel requests 352,000 USDC of pre-season capital.", "file_name": "financing-request.json", "locator": "requested_funding_usdc", "excerpt": "352000" }
+  ],
+  "missing_data": ["Signed escrow account control agreement"],
+  "discrepancies": [
+    {
+      "code": "PMS_BANK_GAP_8PCT",
+      "severity": "medium",
+      "summary": "Verified bank lodging inflows are 8% below the matching PMS revenue total.",
+      "recommended_action": "Reviewer must reconcile OTA fees, taxes, refunds, and cash receipts before approval."
+    }
+  ],
+  "risk_flags": ["Seasonal concentration", "PMS-to-bank reconciliation gap", "Escrow agreement pending"],
+  "risk_band": "B+",
+  "confidence": 0.87,
+  "recommended_terms": {
+    "funding_amount_usdc": 352000,
+    "face_value_usdc": 400000,
+    "discount_pct": 12,
+    "revenue_share_pct": 18,
+    "maturity_date": "2027-04-30"
+  },
+  "review_required": true,
+  "investor_summary": "A 48-room Zermatt hotel with strong winter bookings seeks a 352,000 USDC advance against a 400,000 USDC SRN face value. The package shows solid forward coverage but requires human reconciliation of an 8% PMS-to-bank gap and completion of escrow control documents."
+}
