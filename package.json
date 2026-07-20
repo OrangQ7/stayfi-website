@@ -10,7 +10,8 @@
     "typecheck": "tsc --noEmit",
     "verify:openai": "node scripts/verify-openai.mjs",
     "eval:fjordlight": "node scripts/verify-fjordlight-evaluation.mjs",
-    "eval:review": "node scripts/verify-day2-review.mjs"
+    "eval:review": "node scripts/verify-day2-review.mjs",
+    "eval:issuance": "node scripts/verify-day3-issuance.mjs"
   },
   "dependencies": {
     "next": "^16.2.6",

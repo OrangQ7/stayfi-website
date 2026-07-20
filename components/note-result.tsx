@@ -1,10 +1,12 @@
 "use client";
 
 import Link from "next/link";
+import { IssuancePackagePanel } from "@/components/issuance-package-panel";
 import { Metric, PageIntro } from "@/components/workspace-shell";
 import { reviewDecisionLabel } from "@/lib/review-schema";
 import type { UnderwritingDossier } from "@/lib/underwriting-schema";
 import { useStoredUnderwritingRun } from "@/lib/use-stored-underwriting-run";
+import { useNoteIssuance } from "@/lib/use-note-issuance";
 import { useUnderwritingReview } from "@/lib/use-underwriting-review";
 
 const money = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 });
@@ -20,6 +22,7 @@ export function NoteResult({ dealId, fallback }: { dealId: string; fallback: Und
   const { run, ready } = useStoredUnderwritingRun(dealId);
   const { review } = useUnderwritingReview(dealId);
   const dossier = run?.dossier ?? fallback;
+  const { isCurrent: issuanceCurrent } = useNoteIssuance(dealId, dossier, review);
 
   if (!ready) return <section className="mx-auto max-w-7xl px-5 py-20 text-sm text-white/55 sm:px-8">Loading this note draft…</section>;
   if (!dossier) {
@@ -40,6 +43,7 @@ export function NoteResult({ dealId, fallback }: { dealId: string; fallback: Und
     ? (terms.face_value_usdc / terms.funding_amount_usdc - 1) * 100
     : 0;
   const reviewApproved = !dossier.review_required || review?.decision === "conditionally_approved";
+  const humanReviewApproved = review?.decision === "conditionally_approved";
   const issueBlocker = !review && dossier.review_required
     ? "Human review has not been completed."
     : review?.decision === "needs_information"
@@ -113,10 +117,14 @@ export function NoteResult({ dealId, fallback }: { dealId: string; fallback: Und
         </section>
       </div>
 
-      <div className={`mt-8 flex flex-wrap items-center justify-between gap-4 border p-5 ${reviewApproved ? "border-emerald-300/25 bg-emerald-300/10" : "border-amber-300/25 bg-amber-300/10"}`}>
-        <p className="max-w-3xl text-sm leading-6 text-white/70"><strong>{reviewApproved ? "Conditional review recorded: " : "Issuance blocked: "}</strong>{reviewApproved && review ? review.reviewer_note : issueBlocker}</p>
-        {reviewApproved ? (
-          <Link className="bg-white px-6 py-4 text-sm font-black uppercase text-black transition hover:bg-[#0B63FF] hover:text-white" href={`/portfolio/${dealId}`}>View run portfolio →</Link>
+      <IssuancePackagePanel dealId={dealId} dossier={dossier} review={review} />
+
+      <div className={`mt-8 flex flex-wrap items-center justify-between gap-4 border p-5 ${issuanceCurrent ? "border-emerald-300/25 bg-emerald-300/10" : "border-amber-300/25 bg-amber-300/10"}`}>
+        <p className="max-w-3xl text-sm leading-6 text-white/70"><strong>{issuanceCurrent ? "Issuance package prepared: " : humanReviewApproved ? "Next control: " : "Issuance blocked: "}</strong>{issuanceCurrent ? "The manifest is linked to the current review receipt and can now appear in the synthetic portfolio." : humanReviewApproved ? "Complete the Day 3 safeguards and prepare the synthetic issuance package above." : issueBlocker}</p>
+        {issuanceCurrent ? (
+          <Link className="bg-white px-6 py-4 text-sm font-black uppercase text-black transition hover:bg-[#0B63FF] hover:text-white" href={`/portfolio/${dealId}`}>View issued-state preview →</Link>
+        ) : humanReviewApproved ? (
+          <Link className="border border-white/20 px-6 py-4 text-sm font-black uppercase text-white transition hover:bg-white hover:text-black" href="#issuance-package">Prepare package</Link>
         ) : (
           <Link className="border border-white/20 px-6 py-4 text-sm font-black uppercase text-white transition hover:bg-white hover:text-black" href={`/underwriting/${dealId}`}>Return to human review</Link>
         )}

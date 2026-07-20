@@ -1,6 +1,6 @@
 # Frozen three-minute demo script
 
-Status: **FROZEN for Build Week implementation**  
+Status: **FROZEN for the Day 3 build**
 Target length: **2 minutes 55 seconds**  
 Primary track: **Work & Productivity**
 
@@ -8,44 +8,44 @@ Primary track: **Work & Productivity**
 
 Open the StayFi homepage.
 
-Say: “Seasonal hotels often need cash months before their strongest revenue arrives. StayFi helps a hotel turn a messy financing package into an auditable Seasonal Revenue Note, without pretending the AI can make an unreviewed credit decision.”
+Say: “Seasonal hotels often need cash months before their strongest revenue arrives. StayFi converts a messy hotel package into an auditable Seasonal Revenue Note workflow, while keeping a person in control of financing and issuance.”
 
 Choose **Launch underwriting demo**.
 
-## 0:20–0:50 — Originate a hotel financing request
+## 0:20–0:45 — Originate
 
-Show the four synthetic source files: hotel profile, PMS bookings, bank revenue, and financing request.
+Upload the synthetic hotel source package or load the built-in example, then choose **Start GPT-5.6 underwriting**.
 
-Say: “The hotel uploads the same materials it would already prepare for a lender. For the demo, we use a clearly labelled synthetic Zermatt hotel package.”
+Say: “The hotel supplies profile, PMS, bank and financing evidence. GPT-5.6 reads the actual uploaded files and returns a strict structured dossier.”
 
-Choose **Start GPT-5.6 underwriting**.
+## 0:45–1:25 — Evidence-backed underwriting
 
-## 0:50–1:35 — Evidence-backed underwriting
+Show normalized revenue, risk band, confidence, evidence citations, missing data and discrepancies.
 
-Show normalized revenue, seasonality, requested advance, risk band, and confidence.
+Say: “Every material conclusion points back to source evidence. Contradictions stay visible instead of being smoothed into a confident paragraph.”
 
-Expand the 8% PMS-to-bank discrepancy and point to the source references.
+## 1:25–1:55 — Human decision
 
-Say: “GPT-5.6 produces a strict JSON dossier, not free-form prose. Every important conclusion carries evidence. The model found an 8% reconciliation gap, so StayFi requires a human review before terms can be approved.”
+Complete all three attestations, enter a short rationale, choose **Conditionally approve**, save the review, and download the review receipt.
 
-## 1:35–2:05 — Review and draft terms
+Say: “The model recommends; a person decides. The dossier and reviewer decision are bound together by a SHA-256 audit receipt.”
 
-Confirm that the discrepancy is visible and choose **Continue to note terms**.
+## 1:55–2:30 — Prepare the SRN package
 
-Show the $352,000 funding amount, $400,000 face value, revenue share, maturity date, and escrow waterfall.
+Continue to the note page. Show the proposed funding, face value, revenue share, maturity and waterfall. Complete the three issuance safeguards and choose **Prepare synthetic issuance package**.
 
-Say: “The AI proposes terms inside policy limits. A reviewer controls approval. At a 12% discount, a $400,000 face value funds $352,000—not $35,200.”
+Say: “StayFi now binds the reviewed terms to a synthetic SPV, Base and USDC settlement targets, ERC-3643 transfer controls, investor whitelisting and a proposed lockbox. This is deliberately marked prepared, not issued: there is no wallet, mint or money transfer.”
 
-## 2:05–2:35 — Investor transparency
+Download the issuance JSON and briefly point to its manifest fingerprint.
 
-Choose **View investor portfolio**.
+## 2:30–2:50 — Investor transparency
 
-Show note status, allocation, next settlement, evidence availability, and synthetic performance.
+Choose **View issued-state preview** and show the matching review and issuance fingerprints.
 
-Say: “Investors see what was reviewed, how repayment is supposed to flow, and what changed after issuance. StayFi’s product is the audit trail connecting hotel data, underwriting, terms, and settlement.”
+Say: “The investor view is linked to the same dossier, human receipt and issuance manifest. If evidence or approval changes, the old package becomes stale.”
 
-## 2:35–2:55 — Close
+## 2:50–2:55 — Close
 
-Say: “StayFi gives seasonal hotels a faster path to working capital and gives investors a legible, evidence-backed RWA. Built with Codex and GPT-5.6 using the OpenAI Responses API and Structured Outputs.”
+Say: “StayFi gives seasonal hotels a faster path to working capital and gives qualified investors a legible, evidence-backed RWA workflow.”
 
-End on the portfolio screen. Do not show wallets, live money movement, or real hotel data in the hackathon demo.
+End on the portfolio screen. Do not show wallets, live money movement or real hotel data in the hackathon demo.
