@@ -19,6 +19,7 @@ The pre-hackathon product was the public StayFi protocol website. The Build Week
 - Frozen three-minute flow: `docs/DEMO-SCRIPT.md`
 - Pre-hackathon baseline record: `docs/HACKATHON-BASELINE.md`
 - Day 1 adds real multipart uploads, SHA-256 source manifests, GPT-5.6 file inputs, strict Structured Outputs, runtime validation, and browser-session handoff to the underwriting screen.
+- Day 2 adds a required human-review gate, three explicit reviewer decisions, cross-screen review state, and downloadable SHA-256 audit receipts before draft note terms can advance.
 
 ## Run locally
 

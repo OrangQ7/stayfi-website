@@ -2,14 +2,17 @@
 
 import Link from "next/link";
 import { EvaluationReport } from "@/components/evaluation-report";
+import { HumanReviewPanel } from "@/components/human-review-panel";
 import { Metric, PageIntro } from "@/components/workspace-shell";
 import type { UnderwritingDossier } from "@/lib/underwriting-schema";
 import { useStoredUnderwritingRun } from "@/lib/use-stored-underwriting-run";
+import { useUnderwritingReview } from "@/lib/use-underwriting-review";
 
 const money = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 });
 
 export function UnderwritingResult({ dealId, fallback }: { dealId: string; fallback: UnderwritingDossier | null }) {
   const { run: storedRun, ready } = useStoredUnderwritingRun(dealId);
+  const { review } = useUnderwritingReview(dealId);
   const dossier = storedRun?.dossier ?? fallback;
   const meta = storedRun?.meta;
 
@@ -34,6 +37,7 @@ export function UnderwritingResult({ dealId, fallback }: { dealId: string; fallb
     ? (dossier.recommended_terms.funding_amount_usdc / dossier.normalized_metrics.forward_booked_revenue) * 100
     : 0;
   const primaryDiscrepancy = dossier.discrepancies[0];
+  const noteUnlocked = !dossier.review_required || review?.decision === "conditionally_approved";
 
   return (
     <section className="mx-auto max-w-7xl px-5 py-12 sm:px-8 sm:py-16">
@@ -76,6 +80,8 @@ export function UnderwritingResult({ dealId, fallback }: { dealId: string; fallb
       ) : null}
 
       <EvaluationReport dossier={dossier} />
+
+      <HumanReviewPanel dealId={dealId} dossier={dossier} />
 
       <div className="mt-8 grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
         <section className="border border-white/10 bg-white/[0.02] p-6 sm:p-7">
@@ -128,7 +134,11 @@ export function UnderwritingResult({ dealId, fallback }: { dealId: string; fallb
 
       <div className="mt-8 flex flex-wrap items-center justify-between gap-4 border-t border-white/10 pt-7">
         <p className="max-w-2xl text-xs leading-5 text-white/35">{dossier.investor_summary}</p>
-        <Link className="bg-[#0B63FF] px-6 py-4 text-sm font-black uppercase tracking-[0.06em] transition hover:bg-white hover:text-black" href={`/notes/${dealId}`}>Continue to note terms →</Link>
+        {noteUnlocked ? (
+          <Link className="bg-[#0B63FF] px-6 py-4 text-sm font-black uppercase tracking-[0.06em] transition hover:bg-white hover:text-black" href={`/notes/${dealId}`}>Continue to note terms →</Link>
+        ) : (
+          <span className="border border-amber-300/25 bg-amber-300/10 px-6 py-4 text-sm font-black uppercase tracking-[0.06em] text-amber-200">Complete human review to continue</span>
+        )}
       </div>
     </section>
   );

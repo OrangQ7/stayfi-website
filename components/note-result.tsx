@@ -2,8 +2,10 @@
 
 import Link from "next/link";
 import { Metric, PageIntro } from "@/components/workspace-shell";
+import { reviewDecisionLabel } from "@/lib/review-schema";
 import type { UnderwritingDossier } from "@/lib/underwriting-schema";
 import { useStoredUnderwritingRun } from "@/lib/use-stored-underwriting-run";
+import { useUnderwritingReview } from "@/lib/use-underwriting-review";
 
 const money = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 });
 
@@ -16,6 +18,7 @@ function displayDate(value: string) {
 
 export function NoteResult({ dealId, fallback }: { dealId: string; fallback: UnderwritingDossier | null }) {
   const { run, ready } = useStoredUnderwritingRun(dealId);
+  const { review } = useUnderwritingReview(dealId);
   const dossier = run?.dossier ?? fallback;
 
   if (!ready) return <section className="mx-auto max-w-7xl px-5 py-20 text-sm text-white/55 sm:px-8">Loading this note draft…</section>;
@@ -36,7 +39,14 @@ export function NoteResult({ dealId, fallback }: { dealId: string; fallback: Und
   const grossUplift = terms.funding_amount_usdc > 0
     ? (terms.face_value_usdc / terms.funding_amount_usdc - 1) * 100
     : 0;
-  const issueBlocker = dossier.discrepancies[0]?.recommended_action || dossier.missing_data[0] || "Human approval is still required before issuance.";
+  const reviewApproved = !dossier.review_required || review?.decision === "conditionally_approved";
+  const issueBlocker = !review && dossier.review_required
+    ? "Human review has not been completed."
+    : review?.decision === "needs_information"
+      ? `Reviewer requested more information: ${review.reviewer_note}`
+      : review?.decision === "declined"
+        ? `Reviewer declined the package: ${review.reviewer_note}`
+        : dossier.discrepancies[0]?.recommended_action || dossier.missing_data[0] || "Human approval is still required before issuance.";
 
   return (
     <section className="mx-auto max-w-7xl px-5 py-12 sm:px-8 sm:py-16">
@@ -52,6 +62,17 @@ export function NoteResult({ dealId, fallback }: { dealId: string; fallback: Und
         <Metric label="Issue discount" value={`${terms.discount_pct}%`} detail={`${grossUplift.toFixed(2)}% gross uplift on funded amount`} />
         <Metric label="Maturity" value={displayDate(terms.maturity_date)} detail={`After season ending ${displayDate(dossier.hotel_profile.season_end)}`} />
       </div>
+
+      <section className={`mt-4 border px-5 py-4 ${reviewApproved ? "border-emerald-300/25 bg-emerald-300/10" : "border-amber-300/25 bg-amber-300/10"}`}>
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <p className="text-[10px] font-black uppercase tracking-[0.12em] text-white/40">Human review gate</p>
+            <p className="mt-1 text-sm font-black">{review ? reviewDecisionLabel(review.decision) : dossier.review_required ? "Not reviewed" : "Review not required"}</p>
+          </div>
+          {review ? <p className="font-mono text-[10px] text-white/45" title={review.receipt_sha256}>Receipt {review.receipt_sha256.slice(0, 20)}…</p> : null}
+        </div>
+        {review ? <p className="mt-3 text-xs leading-5 text-white/55">{review.reviewer_role} · {new Date(review.reviewed_at).toLocaleString()} · {review.reviewer_note}</p> : null}
+      </section>
 
       <div className="mt-8 grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
         <section className="border border-white/10 bg-white/[0.02] p-6 sm:p-8">
@@ -92,9 +113,13 @@ export function NoteResult({ dealId, fallback }: { dealId: string; fallback: Und
         </section>
       </div>
 
-      <div className={`mt-8 flex flex-wrap items-center justify-between gap-4 border p-5 ${dossier.review_required ? "border-amber-300/25 bg-amber-300/10" : "border-emerald-300/25 bg-emerald-300/10"}`}>
-        <p className="max-w-3xl text-sm leading-6 text-white/70"><strong>{dossier.review_required ? "Issuance blocked: " : "Review state: "}</strong>{issueBlocker}</p>
-        <Link className="bg-white px-6 py-4 text-sm font-black uppercase text-black transition hover:bg-[#0B63FF] hover:text-white" href={`/portfolio/${dealId}`}>View run portfolio →</Link>
+      <div className={`mt-8 flex flex-wrap items-center justify-between gap-4 border p-5 ${reviewApproved ? "border-emerald-300/25 bg-emerald-300/10" : "border-amber-300/25 bg-amber-300/10"}`}>
+        <p className="max-w-3xl text-sm leading-6 text-white/70"><strong>{reviewApproved ? "Conditional review recorded: " : "Issuance blocked: "}</strong>{reviewApproved && review ? review.reviewer_note : issueBlocker}</p>
+        {reviewApproved ? (
+          <Link className="bg-white px-6 py-4 text-sm font-black uppercase text-black transition hover:bg-[#0B63FF] hover:text-white" href={`/portfolio/${dealId}`}>View run portfolio →</Link>
+        ) : (
+          <Link className="border border-white/20 px-6 py-4 text-sm font-black uppercase text-white transition hover:bg-white hover:text-black" href={`/underwriting/${dealId}`}>Return to human review</Link>
+        )}
       </div>
     </section>
   );

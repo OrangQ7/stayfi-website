@@ -2,8 +2,10 @@
 
 import Link from "next/link";
 import { Metric, PageIntro } from "@/components/workspace-shell";
+import { reviewDecisionLabel } from "@/lib/review-schema";
 import type { UnderwritingDossier } from "@/lib/underwriting-schema";
 import { useStoredUnderwritingRun } from "@/lib/use-stored-underwriting-run";
+import { useUnderwritingReview } from "@/lib/use-underwriting-review";
 
 const money = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 });
 
@@ -20,6 +22,7 @@ function displayDate(value: Date | string) {
 
 export function PortfolioResult({ dealId, fallback }: { dealId: string; fallback: UnderwritingDossier | null }) {
   const { run, ready } = useStoredUnderwritingRun(dealId);
+  const { review } = useUnderwritingReview(dealId);
   const dossier = run?.dossier ?? fallback;
 
   if (!ready) return <section className="mx-auto max-w-7xl px-5 py-20 text-sm text-white/55 sm:px-8">Loading this portfolio view…</section>;
@@ -45,6 +48,7 @@ export function PortfolioResult({ dealId, fallback }: { dealId: string; fallback
   const firstSettlement = new Date(seasonStart);
   firstSettlement.setUTCDate(firstSettlement.getUTCDate() + 45);
   const gap = dossier.normalized_metrics.bank_reconciliation_gap_pct;
+  const reviewApproved = !dossier.review_required || review?.decision === "conditionally_approved";
 
   const timeline = [
     [displayDate(new Date(seasonStart.valueOf() - 45 * 86_400_000)), "Funding reserved", `${money.format(terms.funding_amount_usdc)} synthetic subscription package prepared.`, "complete"],
@@ -68,14 +72,24 @@ export function PortfolioResult({ dealId, fallback }: { dealId: string; fallback
         <Metric label="First reconciliation" value={displayDate(firstSettlement)} detail="Illustrative schedule" />
       </div>
 
+      {!reviewApproved ? (
+        <div className="mt-4 flex flex-wrap items-center justify-between gap-4 border border-amber-300/30 bg-amber-300/10 p-5">
+          <div>
+            <p className="text-xs font-black uppercase text-amber-200">Portfolio preview only · issuance blocked</p>
+            <p className="mt-2 text-sm text-white/60">{review ? `${reviewDecisionLabel(review.decision)}: ${review.reviewer_note}` : "No human review receipt exists for this dossier."}</p>
+          </div>
+          <Link className="border border-white/20 px-4 py-3 text-xs font-black uppercase hover:bg-white hover:text-black" href={`/underwriting/${dealId}`}>Return to review</Link>
+        </div>
+      ) : null}
+
       <section className="mt-8 overflow-hidden border border-white/10 bg-white/[0.02]">
         <div className="flex flex-wrap items-center justify-between gap-4 border-b border-white/10 p-5 sm:p-6">
           <div>
             <p className="text-xs font-black uppercase text-[#75A7FF]">{dossier.hotel_profile.name} SRN</p>
             <h2 className="mt-2 text-2xl font-black">{dossier.hotel_profile.name} · {dossier.hotel_profile.location}</h2>
           </div>
-          <span className={`border px-3 py-2 text-xs font-black uppercase ${dossier.review_required ? "border-amber-300/30 bg-amber-300/10 text-amber-200" : "border-emerald-300/30 bg-emerald-300/10 text-emerald-200"}`}>
-            {dossier.review_required ? "Conditional · review open" : "Reviewer-ready"}
+          <span className={`border px-3 py-2 text-xs font-black uppercase ${reviewApproved ? "border-emerald-300/30 bg-emerald-300/10 text-emerald-200" : "border-amber-300/30 bg-amber-300/10 text-amber-200"}`}>
+            {reviewApproved ? "Human-reviewed · conditional" : "Review gate open"}
           </span>
         </div>
 
@@ -102,7 +116,9 @@ export function PortfolioResult({ dealId, fallback }: { dealId: string; fallback
               <div className="flex justify-between gap-4 border-b border-white/10 pb-3"><span className="text-white/45">Evidence citations</span><span className="font-bold text-white/75">{dossier.evidence.length}</span></div>
               <div className="flex justify-between gap-4 border-b border-white/10 pb-3"><span className="text-white/45">PMS-bank review</span><span className={gap > 0 ? "font-bold text-amber-200" : "font-bold text-emerald-300"}>{gap.toFixed(1)}% gap</span></div>
               <div className="flex justify-between gap-4 border-b border-white/10 pb-3"><span className="text-white/45">Open data items</span><span className={dossier.missing_data.length ? "font-bold text-amber-200" : "font-bold text-emerald-300"}>{dossier.missing_data.length}</span></div>
+              <div className="flex justify-between gap-4 border-b border-white/10 pb-3"><span className="text-white/45">Human review</span><span className={reviewApproved ? "font-bold text-emerald-300" : "font-bold text-amber-200"}>{review ? reviewDecisionLabel(review.decision) : "Not recorded"}</span></div>
             </div>
+            {review ? <p className="mt-4 break-all font-mono text-[10px] leading-5 text-white/35">Receipt SHA-256 · {review.receipt_sha256}</p> : null}
             <Link className="mt-7 block border border-white/20 px-5 py-4 text-center text-xs font-black uppercase transition hover:bg-white hover:text-black" href={`/underwriting/${dealId}`}>Open this run’s evidence</Link>
           </aside>
         </div>
