@@ -95,6 +95,8 @@ export function OriginationWorkspace() {
         meta: payload.meta,
       };
       sessionStorage.setItem(underwritingStorageKey(dealId), JSON.stringify(storedRun));
+      sessionStorage.removeItem(reviewStorageKey(dealId));
+      sessionStorage.removeItem(issuanceStorageKey(dealId));
       router.push(`/underwriting/${dealId}?run=live`);
     } catch (caught) {
       const rawMessage = caught instanceof Error ? caught.message : "UNDERWRITING_FAILED::The analysis could not be completed.";

@@ -34,6 +34,8 @@ const checks = {
   no_live_issuance_claim: submission.includes("prepared_not_issued") && submission.includes("does not connect a wallet"),
   rehearsal_is_labeled: origination.includes("recording fallback") && origination.includes("No API request is made"),
   rehearsal_binds_review_and_issuance: rehearsal.includes("createReviewReceipt") && rehearsal.includes("createSRNIssuancePackage"),
+  live_run_clears_old_review: origination.includes("sessionStorage.removeItem(reviewStorageKey(dealId))"),
+  live_run_clears_old_issuance: origination.includes("sessionStorage.removeItem(issuanceStorageKey(dealId))"),
   readiness_script_registered: packageJson.scripts?.["eval:readiness"] === "node scripts/verify-day4-readiness.mjs",
   thumbnail_is_1280x720: thumbnail.readUInt32BE(16) === 1280 && thumbnail.readUInt32BE(20) === 720,
   thumbnail_manifest_matches: thumbnailManifest.sha256 === thumbnailSha256 && thumbnailManifest.bytes === thumbnail.length,
