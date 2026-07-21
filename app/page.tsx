@@ -1,8 +1,12 @@
 "use client";
 
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+
+gsap.registerPlugin(useGSAP);
 
 type Mechanism = {
   title: string;
@@ -228,6 +232,7 @@ function useSectionProgress<T extends HTMLElement>() {
 }
 
 export default function Home() {
+  const pageRef = useRef<HTMLElement | null>(null);
   const scrollY = useWindowScroll();
   const [selectedDealId, setSelectedDealId] = useState(seasonalDeals[0].id);
   const { progress: heroProgress, ref: heroRef } =
@@ -244,10 +249,27 @@ export default function Home() {
     seasonalDeals.find((deal) => deal.id === selectedDealId) ??
     seasonalDeals[0];
 
+  useGSAP(() => {
+    const media = gsap.matchMedia();
+
+    media.add("(prefers-reduced-motion: no-preference)", () => {
+      gsap.from(".js-home-enter", {
+        autoAlpha: 0,
+        y: 18,
+        duration: 0.75,
+        ease: "power3.out",
+        stagger: 0.08,
+        clearProps: "transform,opacity,visibility",
+      });
+    });
+
+    return () => media.revert();
+  }, { scope: pageRef });
+
   return (
-    <main className="min-h-screen bg-black text-white">
+    <main className="min-h-screen bg-black text-white" ref={pageRef}>
       <header className="fixed left-0 top-0 z-50 w-full border-b border-white/10 bg-black/72 backdrop-blur-xl">
-        <nav className="mx-auto flex h-14 max-w-7xl items-center justify-between px-5 sm:px-8">
+        <nav className="js-home-enter mx-auto flex h-14 max-w-7xl items-center justify-between px-5 sm:px-8">
           <Link className="flex items-center gap-2 text-sm font-black lowercase" href="/">
             <span className="grid h-5 w-5 place-items-center rounded-full border border-white/70 text-[10px] leading-none text-white">
               s
@@ -270,7 +292,7 @@ export default function Home() {
           <div className="absolute inset-0 bg-black" />
           <div className="grain absolute inset-0 opacity-10" />
           <HeroSandwich progress={heroProgress} scrollY={scrollY} />
-          <div className="absolute left-[5vw] top-[8vh] z-10 w-[92vw]">
+          <div className="js-home-enter absolute left-[5vw] top-[8vh] z-10 w-[92vw]">
             <p className="mb-5 text-[11px] font-black uppercase tracking-[0.16em] text-white/42 sm:mb-7">
               Seasonal hospitality RWA protocol
             </p>
@@ -291,7 +313,7 @@ export default function Home() {
       </section>
 
       <section className="mx-auto grid min-h-[72vh] max-w-7xl place-items-center px-5 py-24 sm:px-8">
-        <div className="w-full max-w-5xl border-t border-white/12 pt-9">
+        <div className="interactive-card w-full max-w-5xl border-t border-white/12 pt-9">
           <p className="text-xs font-black uppercase text-white/42">Mission</p>
           <h1
             className="mt-8 max-w-4xl text-5xl font-black leading-none text-white sm:text-7xl"
@@ -299,7 +321,7 @@ export default function Home() {
             Turn booked seasonal revenue into liquid on-chain notes.
           </h1>
           <Link
-            className="mt-9 inline-flex min-h-14 items-center bg-[#0B63FF] px-6 text-sm font-black uppercase tracking-[0.06em] text-white transition hover:bg-white hover:text-black"
+            className="tech-action mt-9 inline-flex min-h-14 items-center bg-[#0B63FF] px-6 text-sm font-black uppercase tracking-[0.06em] text-white transition hover:bg-white hover:text-black"
             href="/originate"
           >
             Launch underwriting demo →
@@ -359,7 +381,7 @@ export default function Home() {
           <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {marketStats.map(([label, value, detail]) => (
               <div
-                className="min-h-44 border border-white/12 bg-white/[0.025] p-5"
+                className="interactive-card min-h-44 border border-white/12 bg-white/[0.025] p-5"
                 key={label}
               >
                 <p className="text-xs font-black uppercase text-white/42">
@@ -379,23 +401,14 @@ export default function Home() {
             <h2 className="max-w-4xl text-5xl font-black leading-none sm:text-7xl lg:text-8xl">
               Build seasonal liquidity. explore StayFi.
             </h2>
-            <form className="grid gap-3 lg:justify-self-end">
-              <label className="sr-only" htmlFor="email">
-                Work email
-              </label>
-              <input
-                id="email"
-                className="h-14 w-full min-w-0 border border-white/50 bg-transparent px-4 text-white placeholder:text-white/60 outline-none transition focus:border-white lg:w-96"
-                placeholder="work email"
-                type="email"
-              />
-              <button
-                className="h-14 border border-white bg-white px-6 text-sm font-black uppercase text-[#0B63FF] transition hover:bg-transparent hover:text-white"
-                type="submit"
-              >
-                Request access
-              </button>
-            </form>
+            <div className="grid gap-3 lg:w-96 lg:justify-self-end">
+              <Link className="tech-action flex h-14 items-center justify-center bg-white px-6 text-sm font-black uppercase text-[#0B63FF] transition hover:bg-[#E0FFB3]" href="/originate">
+                Open underwriting workspace
+              </Link>
+              <Link className="tech-action flex h-14 items-center justify-center border border-white/60 px-6 text-sm font-black uppercase text-white transition hover:border-white hover:bg-white/10" href="/portfolio">
+                View investor audit trail
+              </Link>
+            </div>
           </div>
         </div>
         <footer className="mx-auto flex max-w-7xl flex-col gap-7 py-8 lg:flex-row lg:items-end lg:justify-between">
@@ -420,7 +433,41 @@ function SeasonalNotesApp({
   selectedDealId: string;
   setSelectedDealId: (id: string) => void;
 }) {
+  const detailRef = useRef<HTMLDivElement | null>(null);
   const subscriptionProgress = Number.parseInt(selectedDeal.subscribed, 10);
+
+  useGSAP(() => {
+    const media = gsap.matchMedia();
+
+    media.add("(prefers-reduced-motion: no-preference)", () => {
+      gsap.fromTo(
+        detailRef.current,
+        { autoAlpha: 0.35, y: 14 },
+        {
+          autoAlpha: 1,
+          y: 0,
+          duration: 0.45,
+          ease: "power3.out",
+          clearProps: "transform,opacity,visibility",
+        },
+      );
+      gsap.fromTo(
+        ".js-progress-fill",
+        { scaleX: 0 },
+        { scaleX: 1, duration: 0.75, ease: "power3.out" },
+      );
+      gsap.from(".js-deal-stat", {
+        autoAlpha: 0,
+        y: 8,
+        duration: 0.35,
+        ease: "power2.out",
+        stagger: 0.045,
+        clearProps: "transform,opacity,visibility",
+      });
+    });
+
+    return () => media.revert();
+  }, { dependencies: [selectedDealId], revertOnUpdate: true, scope: detailRef });
 
   return (
     <section id="app" className="mx-auto max-w-7xl px-5 py-24 sm:px-8">
@@ -449,7 +496,7 @@ function SeasonalNotesApp({
               return (
                 <button
                   aria-pressed={isActive}
-                  className={`w-full border p-5 text-left transition ${
+                  className={`interactive-card w-full border p-5 text-left transition ${
                     isActive
                       ? "border-[#0B63FF] bg-[#0B63FF]/12 shadow-[0_0_70px_rgba(11,99,255,0.18)]"
                       : "border-white/12 bg-white/[0.025] hover:border-white/28"
@@ -481,7 +528,7 @@ function SeasonalNotesApp({
             })}
           </div>
 
-          <div className="border border-white/12 bg-[#050505] p-4 sm:p-6">
+          <div className="deal-detail-panel border border-white/12 bg-[#050505] p-4 sm:p-6" ref={detailRef}>
             <div className="grid gap-6 lg:grid-cols-[0.86fr_1fr]">
               <div className="relative min-h-72 overflow-hidden border border-white/10 bg-black">
                 <Image
@@ -515,16 +562,19 @@ function SeasonalNotesApp({
                   {selectedDeal.season} revenue note
                 </h3>
                 <div className="mt-6 grid grid-cols-2 gap-3">
-                  <DealMetric label="SRN size" value={selectedDeal.srnSize} />
+                  <DealMetric className="js-deal-stat" label="SRN size" value={selectedDeal.srnSize} />
                   <DealMetric
+                    className="js-deal-stat"
                     label="Advance rate"
                     value={selectedDeal.advanceRate}
                   />
                   <DealMetric
+                    className="js-deal-stat"
                     label="Forecast occupancy"
                     value={selectedDeal.occupancy}
                   />
                   <DealMetric
+                    className="js-deal-stat"
                     label="Projected revenue"
                     value={selectedDeal.projectedRevenue}
                   />
@@ -536,20 +586,20 @@ function SeasonalNotesApp({
                   </div>
                   <div className="mt-3 h-2 bg-white/10">
                     <div
-                      className="h-full bg-[#E0FFB3]"
+                      className="js-progress-fill deal-progress-fill h-full bg-[#E0FFB3]"
                       style={{ width: `${subscriptionProgress}%` }}
                     />
                   </div>
                 </div>
                 <div className="mt-6 grid gap-3 sm:grid-cols-2">
                   <Link
-                    className="flex h-12 items-center justify-center bg-white px-5 text-center text-sm font-black uppercase text-black transition hover:bg-[#E0FFB3]"
+                    className="tech-action flex h-12 items-center justify-center bg-white px-5 text-center text-sm font-black uppercase text-black transition hover:bg-[#E0FFB3]"
                     href="/originate"
                   >
                     Start underwriting
                   </Link>
                   <Link
-                    className="flex h-12 items-center justify-center border border-white/18 px-5 text-center text-sm font-black uppercase text-white/72 transition hover:border-white/40 hover:text-white"
+                    className="tech-action flex h-12 items-center justify-center border border-white/18 px-5 text-center text-sm font-black uppercase text-white/72 transition hover:border-white/40 hover:text-white"
                     href="/underwriting/alpenstern-2026-winter"
                   >
                     View sample evidence
@@ -578,9 +628,9 @@ function DealMiniStat({ label, value }: { label: string; value: string }) {
   );
 }
 
-function DealMetric({ label, value }: { label: string; value: string }) {
+function DealMetric({ label, value, className = "" }: { label: string; value: string; className?: string }) {
   return (
-    <div className="border border-white/10 bg-white/[0.025] p-4">
+    <div className={`interactive-card border border-white/10 bg-white/[0.025] p-4 ${className}`}>
       <p className="text-[10px] font-black uppercase text-white/36">{label}</p>
       <p className="mt-3 text-xl font-black text-white">{value}</p>
     </div>

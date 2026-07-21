@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
+import { RouteMotion } from "@/components/route-motion";
 
 const stageLabels = [
   { id: "originate", label: "01 Originate" },
@@ -47,7 +48,7 @@ export function WorkspaceShell({
         <div className="mx-auto flex max-w-7xl gap-2 overflow-x-auto px-5 py-3 sm:px-8">
           {stages.map((stage) => (
             <Link
-              className={`whitespace-nowrap border px-3 py-2 text-[11px] font-black uppercase tracking-[0.08em] transition ${active === stage.id ? "border-[#0B63FF] bg-[#0B63FF] text-white" : "border-white/10 text-white/42 hover:border-white/30 hover:text-white"}`}
+              className={`stage-link whitespace-nowrap border px-3 py-2 text-[11px] font-black uppercase tracking-[0.08em] transition ${active === stage.id ? "stage-link-active border-[#0B63FF] bg-[#0B63FF] text-white" : "border-white/10 text-white/42 hover:border-white/30 hover:text-white"}`}
               href={stage.href}
               key={stage.id}
             >
@@ -57,14 +58,14 @@ export function WorkspaceShell({
         </div>
       </nav>
 
-      {children}
+      <RouteMotion>{children}</RouteMotion>
     </main>
   );
 }
 
 export function Metric({ label, value, detail }: { label: string; value: string; detail?: string }) {
   return (
-    <div className="border border-white/10 bg-white/[0.025] p-5">
+    <div className="interactive-card border border-white/10 bg-white/[0.025] p-5">
       <p className="text-[10px] font-black uppercase tracking-[0.12em] text-white/40">{label}</p>
       <p className="mt-5 text-3xl font-black text-white">{value}</p>
       {detail ? <p className="mt-2 text-sm leading-5 text-white/45">{detail}</p> : null}
