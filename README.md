@@ -21,6 +21,23 @@ The pre-hackathon product was the public StayFi protocol website. The Build Week
 - Day 1 adds real multipart uploads, SHA-256 source manifests, GPT-5.6 file inputs, strict Structured Outputs, runtime validation, and browser-session handoff to the underwriting screen.
 - Day 2 adds a required human-review gate, three explicit reviewer decisions, cross-screen review state, and downloadable SHA-256 audit receipts before draft note terms can advance.
 - Day 3 adds a review-bound SRN issuance-preparation package with Base/USDC and ERC-3643 implementation targets, SPV and lockbox controls, a downloadable SHA-256 manifest, and an explicit `prepared_not_issued` safety state.
+- Day 4 adds a deterministic, clearly labelled recording rehearsal, judge testing instructions, submission copy, a sub-three-minute English video plan, and final readiness checks.
+
+## Judge quick test
+
+The normal path on `/originate` uploads the included synthetic files to the GPT-5.6 underwriting endpoint. If the API is temporarily unavailable during judging, choose **Open recording rehearsal**. It seeds the frozen synthetic dossier, review receipt, and `prepared_not_issued` manifest in the current browser tab without making an API request. The rehearsal is labelled as a local fixture and is not presented as a live GPT-5.6 result.
+
+No login, wallet, payment, or real hotel data is required.
+
+## How we collaborated with Codex
+
+The pre-hackathon StayFi protocol website is preserved in baseline commit `443b3c6`. Work added after the July 13 submission-period start is recorded in the subsequent commit history.
+
+During Build Week, Codex helped inspect and preserve the existing repository, implement the four-stage product workflow, connect real multi-file uploads to GPT-5.6 through the Responses API, define and validate the strict underwriting schema, repair the uploaded-result handoff, build the complex evaluation suite and automated scoring, add the human-review receipt and SRN issuance-preparation controls, run regression checks, and prepare the demo and submission materials.
+
+The founder retained the key product and risk decisions: focus on seasonal hotel working capital; keep evidence and contradictions visible; require an explicit human decision; treat SRNs as revenue-linked rather than guaranteed debt; keep `$STAY` separate from hotel-revenue rights; use synthetic data; and stop the prototype at `prepared_not_issued` until legal, identity, escrow, and blockchain controls exist.
+
+GPT-5.6 performs the runtime underwriting work: it reads the submitted hotel files and returns the strict evidence-backed dossier used by later screens. Codex accelerated product design, implementation, testing, debugging, and documentation, while the repository history and the required `/feedback` Session ID document the Build Week collaboration.
 
 ## Run locally
 

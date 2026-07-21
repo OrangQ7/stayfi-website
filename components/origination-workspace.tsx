@@ -3,10 +3,15 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
+import dossierFixture from "@/data/demo/alpenstern-2026-winter.json";
+import { createDemoRehearsalState } from "@/lib/demo-rehearsal";
+import { issuanceStorageKey } from "@/lib/issuance-schema";
+import { reviewStorageKey } from "@/lib/review-schema";
 import {
   isUnderwritingDossier,
   underwritingStorageKey,
   type StoredUnderwritingRun,
+  type UnderwritingDossier,
 } from "@/lib/underwriting-schema";
 import { PageIntro } from "@/components/workspace-shell";
 
@@ -55,6 +60,7 @@ export function OriginationWorkspace() {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [status, setStatus] = useState<RunStatus>("idle");
   const [error, setError] = useState<{ code: string; message: string } | null>(null);
+  const [rehearsing, setRehearsing] = useState(false);
 
   const busy = status === "preparing" || status === "analyzing";
 
@@ -128,6 +134,22 @@ export function OriginationWorkspace() {
 
   async function runComplexEvaluation() {
     await loadPreparedPackage(complexEvaluationFiles);
+  }
+
+  async function openRecordingRehearsal() {
+    setRehearsing(true);
+    setError(null);
+    try {
+      const dossier = dossierFixture as UnderwritingDossier;
+      const rehearsal = await createDemoRehearsalState(dossier);
+      sessionStorage.setItem(underwritingStorageKey(dossier.deal_id), JSON.stringify(rehearsal.run));
+      sessionStorage.setItem(reviewStorageKey(dossier.deal_id), JSON.stringify(rehearsal.review));
+      sessionStorage.setItem(issuanceStorageKey(dossier.deal_id), JSON.stringify(rehearsal.issuance));
+      router.push(`/underwriting/${dossier.deal_id}?run=rehearsal`);
+    } catch (caught) {
+      setError({ code: "REHEARSAL_FAILED", message: caught instanceof Error ? caught.message : "The rehearsal state could not be prepared." });
+      setRehearsing(false);
+    }
   }
 
   function handleFiles(list: FileList | null) {
@@ -250,6 +272,19 @@ export function OriginationWorkspace() {
           >
             Run complex stress test + auto-score
           </button>
+
+          <div className="mt-5 border-t border-white/15 pt-5">
+            <p className="text-[10px] font-black uppercase tracking-[0.12em] text-violet-200">Day 4 · recording fallback</p>
+            <p className="mt-2 text-xs leading-5 text-white/45">Seeds the frozen synthetic dossier, human-review receipt, and prepared-not-issued SRN manifest in this tab. No API request is made.</p>
+            <button
+              className="mt-4 flex min-h-12 w-full items-center justify-center border border-violet-200/40 bg-violet-200/10 px-5 text-center text-xs font-black uppercase tracking-[0.06em] text-violet-100 transition hover:bg-violet-100 hover:text-black disabled:cursor-wait disabled:opacity-45"
+              disabled={busy || rehearsing}
+              onClick={openRecordingRehearsal}
+              type="button"
+            >
+              {rehearsing ? "Preparing rehearsal…" : "Open recording rehearsal →"}
+            </button>
+          </div>
 
           <p aria-live="polite" className="mt-4 text-center text-[11px] leading-5 text-white/38">
             {busy ? "Keep this page open. Source files are sent to OpenAI for this analysis and the response is not stored by the API." : "No token is minted and no funds move in this workflow."}

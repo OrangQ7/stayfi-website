@@ -1,10 +1,10 @@
 # Frozen three-minute demo script
 
-Status: **FROZEN for the Day 3 build**
-Target length: **2 minutes 55 seconds**  
+Status: **FROZEN for the Day 4 submission build**
+Target length: **2 minutes 44 seconds**
 Primary track: **Work & Productivity**
 
-## 0:00–0:20 — Problem and promise
+## 0:00–0:18 — Problem and promise
 
 Open the StayFi homepage.
 
@@ -12,25 +12,25 @@ Say: “Seasonal hotels often need cash months before their strongest revenue ar
 
 Choose **Launch underwriting demo**.
 
-## 0:20–0:45 — Originate
+## 0:18–0:43 — Originate
 
 Upload the synthetic hotel source package or load the built-in example, then choose **Start GPT-5.6 underwriting**.
 
 Say: “The hotel supplies profile, PMS, bank and financing evidence. GPT-5.6 reads the actual uploaded files and returns a strict structured dossier.”
 
-## 0:45–1:25 — Evidence-backed underwriting
+## 0:43–1:18 — Evidence-backed underwriting
 
 Show normalized revenue, risk band, confidence, evidence citations, missing data and discrepancies.
 
 Say: “Every material conclusion points back to source evidence. Contradictions stay visible instead of being smoothed into a confident paragraph.”
 
-## 1:25–1:55 — Human decision
+## 1:18–1:48 — Human decision
 
 Complete all three attestations, enter a short rationale, choose **Conditionally approve**, save the review, and download the review receipt.
 
 Say: “The model recommends; a person decides. The dossier and reviewer decision are bound together by a SHA-256 audit receipt.”
 
-## 1:55–2:30 — Prepare the SRN package
+## 1:48–2:18 — Prepare the SRN package
 
 Continue to the note page. Show the proposed funding, face value, revenue share, maturity and waterfall. Complete the three issuance safeguards and choose **Prepare synthetic issuance package**.
 
@@ -38,13 +38,13 @@ Say: “StayFi now binds the reviewed terms to a synthetic SPV, Base and USDC se
 
 Download the issuance JSON and briefly point to its manifest fingerprint.
 
-## 2:30–2:50 — Investor transparency
+## 2:18–2:38 — Investor transparency
 
 Choose **View issued-state preview** and show the matching review and issuance fingerprints.
 
 Say: “The investor view is linked to the same dossier, human receipt and issuance manifest. If evidence or approval changes, the old package becomes stale.”
 
-## 2:50–2:55 — Close
+## 2:38–2:44 — Close
 
 Say: “StayFi gives seasonal hotels a faster path to working capital and gives qualified investors a legible, evidence-backed RWA workflow.”
 

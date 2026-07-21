@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" role="img" aria-labelledby="title description">
+  <title id="title">StayFi Build Week demo thumbnail</title>
+  <description id="description">Dark blue and black graphic for auditable seasonal hotel financing with GPT-5.6.</description>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#020204"/>
+      <stop offset="0.62" stop-color="#071633"/>
+      <stop offset="1" stop-color="#0B63FF"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#75A7FF" stop-opacity="0.42"/>
+      <stop offset="1" stop-color="#75A7FF" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="54" height="54" patternUnits="userSpaceOnUse">
+      <path d="M54 0H0V54" fill="none" stroke="#ffffff" stroke-opacity="0.055"/>
+    </pattern>
+  </defs>
+  <rect width="1280" height="720" fill="url(#bg)"/>
+  <rect width="1280" height="720" fill="url(#grid)"/>
+  <circle cx="1040" cy="342" r="420" fill="url(#glow)"/>
+  <g fill="none" stroke="#ffffff" stroke-opacity="0.2" stroke-width="4">
+    <rect x="935" y="140" width="190" height="270" rx="22" transform="rotate(20 1030 275)"/>
+    <rect x="997" y="283" width="190" height="270" rx="22" transform="rotate(20 1092 418)"/>
+    <rect x="873" y="0" width="190" height="270" rx="22" transform="rotate(20 968 135)"/>
+  </g>
+  <g font-family="Arial, Helvetica, sans-serif">
+    <text x="76" y="92" fill="#ffffff" font-size="30" font-weight="800" letter-spacing="5">STAYFI</text>
+    <text x="76" y="226" fill="#ffffff" font-size="76" font-weight="900">Auditable seasonal</text>
+    <text x="76" y="310" fill="#ffffff" font-size="76" font-weight="900">hotel financing.</text>
+    <text x="78" y="383" fill="#B8CCF8" font-size="30" font-weight="600">Files → evidence → human review → SRN package</text>
+    <rect x="76" y="467" width="557" height="72" rx="4" fill="#0B63FF"/>
+    <text x="105" y="514" fill="#ffffff" font-size="26" font-weight="800">BUILT WITH CODEX + GPT-5.6</text>
+    <text x="78" y="631" fill="#ffffff" fill-opacity="0.64" font-size="22" font-weight="600">Synthetic demo · prepared, not issued · no real funds</text>
+  </g>
+</svg>
