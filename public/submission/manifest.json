@@ -1,0 +1,17 @@
+{
+  "asset": "stayfi-youtube-thumbnail.png",
+  "source": "stayfi-youtube-thumbnail.svg",
+  "purpose": "OpenAI Build Week public YouTube demonstration thumbnail",
+  "width": 1280,
+  "height": 720,
+  "mime_type": "image/png",
+  "bytes": 581859,
+  "sha256": "8289367b58821802000965d111d475fa8f718f3e50e938459e3cf3074ec846c3",
+  "render_method": "Deterministic SVG rendered by local headless Google Chrome",
+  "provenance": {
+    "copy_source": "Project-authored Day 4 submission materials",
+    "visual_source": "Original geometric composition created for StayFi",
+    "third_party_logos": false,
+    "generated_people_or_places": false
+  }
+}

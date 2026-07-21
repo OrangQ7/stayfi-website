@@ -1,5 +1,5 @@
 {
-  "name": "pixel-cat-generator",
+  "name": "stayfi-underwriting-demo",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -7,9 +7,17 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "verify:openai": "node scripts/verify-openai.mjs",
+    "eval:fjordlight": "node scripts/verify-fjordlight-evaluation.mjs",
+    "eval:review": "node scripts/verify-day2-review.mjs",
+    "eval:issuance": "node scripts/verify-day3-issuance.mjs",
+    "eval:readiness": "node scripts/verify-day4-readiness.mjs",
+    "eval:rehearsal": "node scripts/verify-day4-rehearsal.mjs"
   },
   "dependencies": {
+    "@gsap/react": "^2.1.2",
+    "gsap": "^3.15.0",
     "next": "^16.2.6",
     "openai": "6.9.1",
     "react": "19.2.0",

@@ -1,0 +1,13 @@
+{
+  "synthetic": true,
+  "deal_id": "alpenstern-2026-winter",
+  "requested_funding_usdc": 352000,
+  "proposed_face_value_usdc": 400000,
+  "proposed_discount_pct": 12,
+  "use_of_funds": [
+    { "category": "Pre-season staffing", "amount_usdc": 142000 },
+    { "category": "Supplier deposits", "amount_usdc": 130000 },
+    { "category": "Energy and maintenance reserve", "amount_usdc": 80000 }
+  ],
+  "requested_funding_date": "2026-10-15"
+}

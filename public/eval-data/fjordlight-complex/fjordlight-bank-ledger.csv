@@ -1,0 +1,7 @@
+synthetic,historical_month,pms_lodging_revenue_usdc,verified_lodging_inflow_usdc,non_lodging_inflow_usdc,reconciliation_rate,statement_locator
+true,2026-11,820000,754400,48200,0.92,statement page 2
+true,2026-12,1050000,966000,61700,0.92,statement page 3
+true,2027-01,1200000,1104000,73500,0.92,statement page 4
+true,2027-02,1150000,1058000,69200,0.92,statement page 5
+true,2027-03,980000,901600,55400,0.92,statement page 6
+true,CONTROL TOTAL,5200000,4784000,308000,0.92,verified control total

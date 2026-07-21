@@ -1,0 +1,68 @@
+{
+  "deal_id": "fjordlight-2027-28-winter",
+  "synthetic": true,
+  "hotel_profile": {
+    "name": "Fjordlight Grand Hotel",
+    "location": "Tromso, Norway",
+    "rooms": 96,
+    "season_start": "2027-11-01",
+    "season_end": "2028-03-31"
+  },
+  "source_files": [
+    { "file_name": "fjordlight-property-profile.pdf", "category": "hotel_profile", "sha256": "a36b870cc167d98bb3d3cdd64aa028819b214b134765bcec00b5b67ce4f3ed6c", "synthetic": true },
+    { "file_name": "fjordlight-pms-export.xlsx", "category": "pms", "sha256": "a0ba5349d8737214f0fd8916f0cb1fd264819c58578c2873afc8b79c9a43f1c2", "synthetic": true },
+    { "file_name": "fjordlight-bank-ledger.csv", "category": "bank", "sha256": "521372cf9b96a24fdd7434f2c6990825f0e11d3575f21edbe811f87cc5ff6ab6", "synthetic": true },
+    { "file_name": "fjordlight-ota-settlements.csv", "category": "other", "sha256": "f3a82f7bb1b14c997f93d39edc0f90a9d40b60209f8b4e500294f7b4216ec21a", "synthetic": true },
+    { "file_name": "fjordlight-financing-request.docx", "category": "financing_request", "sha256": "547bb4c47966cb64f9e3d68d231337de89afb0fa752892efec0baab23149d8ad", "synthetic": true },
+    { "file_name": "fjordlight-insurance-scan.pdf", "category": "other", "sha256": "853924d676f08c72055d866ce687e2cdf43ab018bcc95f1d607e23546dbab535", "synthetic": true }
+  ],
+  "normalized_metrics": {
+    "currency": "USDC",
+    "forward_booked_revenue": 5600000,
+    "historical_pms_revenue": 5200000,
+    "verified_bank_inflow": 4784000,
+    "occupancy_rate": 0.8100328947368421,
+    "bank_reconciliation_gap_pct": 8
+  },
+  "evidence": [
+    { "claim": "The property has 96 sellable rooms.", "file_name": "fjordlight-property-profile.pdf", "locator": "page 1, verified property record", "excerpt": "Sellable rooms 96; four staff rooms excluded" },
+    { "claim": "Forward net booked revenue is 5,600,000 USDC.", "file_name": "fjordlight-pms-export.xlsx", "locator": "PMS Monthly!G10", "excerpt": "CONTROL TOTAL 5,600,000" },
+    { "claim": "Weighted occupancy is 81.0033%.", "file_name": "fjordlight-pms-export.xlsx", "locator": "PMS Monthly!H10", "excerpt": "11,820 / 14,592 = 0.8100328947" },
+    { "claim": "Historical PMS lodging revenue is 5,200,000 USDC.", "file_name": "fjordlight-bank-ledger.csv", "locator": "CONTROL TOTAL, pms_lodging_revenue_usdc", "excerpt": "5200000" },
+    { "claim": "Verified lodging inflow is 4,784,000 USDC.", "file_name": "fjordlight-bank-ledger.csv", "locator": "CONTROL TOTAL, verified_lodging_inflow_usdc", "excerpt": "4784000" },
+    { "claim": "January contains a disputed 42,000 USDC chargeback.", "file_name": "fjordlight-ota-settlements.csv", "locator": "2028-01 row, chargebacks_usdc", "excerpt": "42000, disputed chargeback open" },
+    { "claim": "The requested funding is 612,000 USDC against 720,000 face value.", "file_name": "fjordlight-financing-request.docx", "locator": "Requested structure table", "excerpt": "612,000 USDC requested; 720,000 USDC face value" },
+    { "claim": "The insurance expires before the season begins.", "file_name": "fjordlight-insurance-scan.pdf", "locator": "scan page 1, policy expiry", "excerpt": "2027-10-31 23:59 CET; renewal certificate not attached" }
+  ],
+  "missing_data": [
+    "Current insurance renewal certificate or binder",
+    "FY2026 audited financial statements"
+  ],
+  "discrepancies": [
+    { "code": "PMS_DUPLICATE_BKG_3118", "severity": "high", "summary": "Booking BKG-3118 appears twice as a duplicate in the raw sample.", "recommended_action": "Resolve the duplicate before approval." },
+    { "code": "ROOM_INVENTORY_96_VS_100", "severity": "medium", "summary": "The property profile has 96 sellable rooms while the financing request states 100 revenue rooms.", "recommended_action": "Reconcile the room inventory definition." },
+    { "code": "PMS_BANK_GAP_8PCT", "severity": "medium", "summary": "Verified bank inflow is 8% below historical PMS lodging revenue.", "recommended_action": "Reconcile the PMS-to-bank gap before approval." },
+    { "code": "INSURANCE_EXPIRY", "severity": "high", "summary": "Insurance expires on 2027-10-31 before the season starts.", "recommended_action": "Obtain the insurance renewal certificate or binder before funding." },
+    { "code": "OTA_CHARGEBACK_42000", "severity": "medium", "summary": "A 42000 USDC OTA chargeback remains disputed.", "recommended_action": "Resolve the OTA dispute and obtain the final settlement outcome." }
+  ],
+  "risk_flags": [
+    "Duplicate booking exception",
+    "Room inventory conflict",
+    "8% PMS-to-bank gap",
+    "Insurance renewal missing",
+    "OTA chargeback dispute",
+    "Audited statements missing",
+    "Boiler service during operating season"
+  ],
+  "risk_band": "B-",
+  "confidence": 0.82,
+  "recommended_terms": {
+    "funding_amount_usdc": 612000,
+    "face_value_usdc": 720000,
+    "discount_pct": 15,
+    "revenue_share_pct": 8,
+    "maturity_date": "2028-04-30"
+  },
+  "review_required": true,
+  "investor_summary": "Fjordlight Grand Hotel has 5.6M USDC of synthetic forward net bookings, but the package requires human review of duplicate PMS data, a room-count conflict, an 8% bank reconciliation gap, a disputed OTA chargeback, expired insurance, and missing audited statements before any financing decision."
+}

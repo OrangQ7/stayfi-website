@@ -1,0 +1,10 @@
+{
+  "synthetic": true,
+  "hotel_name": "Hotel Alpenstern",
+  "location": "Zermatt, Switzerland",
+  "rooms": 48,
+  "season_start": "2026-12-01",
+  "season_end": "2027-03-31",
+  "pms": "Mews synthetic export",
+  "operator_years": 9
+}

@@ -1,0 +1,5 @@
+synthetic,stay_month,available_room_nights,booked_room_nights,occupancy_rate,gross_booked_revenue_usdc
+true,2026-12,1488,1161,0.78,985000
+true,2027-01,1488,1250,0.84,1120000
+true,2027-02,1344,1156,0.86,1190000
+true,2027-03,1488,1131,0.76,955000
