@@ -276,7 +276,7 @@ export function OriginationWorkspace() {
           </button>
 
           <div className="mt-5 border-t border-white/15 pt-5">
-            <p className="text-[10px] font-black uppercase tracking-[0.12em] text-violet-200">Day 4 · recording fallback</p>
+            <p className="text-[10px] font-black uppercase tracking-[0.12em] text-violet-200">Synthetic demo rehearsal</p>
             <p className="mt-2 text-xs leading-5 text-white/45">Seeds the frozen synthetic dossier, human-review receipt, and prepared-not-issued SRN manifest in this tab. No API request is made.</p>
             <button
               className="mt-4 flex min-h-12 w-full items-center justify-center border border-violet-200/40 bg-violet-200/10 px-5 text-center text-xs font-black uppercase tracking-[0.06em] text-violet-100 transition hover:bg-violet-100 hover:text-black disabled:cursor-wait disabled:opacity-45"

@@ -111,7 +111,7 @@ async function prepareFiles(files: File[]): Promise<PreparedFile[]> {
       if (file.size > MAX_FILE_BYTES) {
         throw new UnderwritingRequestError(
           "FILE_TOO_LARGE",
-          `${file.name} exceeds the 2 MB Day 1 limit.`,
+          `${file.name} exceeds the 2 MB upload limit.`,
           413,
         );
       }
@@ -120,7 +120,7 @@ async function prepareFiles(files: File[]): Promise<PreparedFile[]> {
       if (totalBytes > MAX_TOTAL_BYTES) {
         throw new UnderwritingRequestError(
           "PACKAGE_TOO_LARGE",
-          "The source package exceeds the 4 MB Day 1 limit.",
+          "The source package exceeds the 4 MB upload limit.",
           413,
         );
       }

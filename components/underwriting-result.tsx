@@ -137,7 +137,7 @@ export function UnderwritingResult({ dealId, fallback }: { dealId: string; fallb
         {noteUnlocked ? (
           <Link className="bg-[#0B63FF] px-6 py-4 text-sm font-black uppercase tracking-[0.06em] transition hover:bg-white hover:text-black" href={`/notes/${dealId}`}>Continue to note terms →</Link>
         ) : (
-          <span className="border border-amber-300/25 bg-amber-300/10 px-6 py-4 text-sm font-black uppercase tracking-[0.06em] text-amber-200">Complete human review to continue</span>
+          <Link className="border border-amber-300/25 bg-amber-300/10 px-6 py-4 text-sm font-black uppercase tracking-[0.06em] text-amber-200 transition hover:border-amber-200 hover:bg-amber-200 hover:text-black" href="#human-review">Open human review →</Link>
         )}
       </div>
     </section>

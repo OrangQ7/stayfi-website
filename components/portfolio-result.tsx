@@ -78,7 +78,7 @@ export function PortfolioResult({ dealId, fallback }: { dealId: string; fallback
         <div className="mt-4 flex flex-wrap items-center justify-between gap-4 border border-amber-300/30 bg-amber-300/10 p-5">
           <div>
             <p className="text-xs font-black uppercase text-amber-200">Portfolio preview only · issuance not prepared</p>
-            <p className="mt-2 text-sm text-white/60">{reviewApproved ? "The human review is approved, but no current Day 3 issuance package is linked to it." : review ? `${reviewDecisionLabel(review.decision)}: ${review.reviewer_note}` : "No human review receipt exists for this dossier."}</p>
+            <p className="mt-2 text-sm text-white/60">{reviewApproved ? "The human review is approved, but no current issuance package is linked to it." : review ? `${reviewDecisionLabel(review.decision)}: ${review.reviewer_note}` : "No human review receipt exists for this dossier."}</p>
           </div>
           <Link className="border border-white/20 px-4 py-3 text-xs font-black uppercase hover:bg-white hover:text-black" href={reviewApproved ? `/notes/${dealId}#issuance-package` : `/underwriting/${dealId}`}>{reviewApproved ? "Prepare issuance package" : "Return to review"}</Link>
         </div>

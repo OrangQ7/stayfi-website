@@ -32,7 +32,7 @@ const checks = {
   judge_fallback_documented: readme.includes("Open recording rehearsal"),
   video_under_three_minutes: videoPlan.includes("2:40–2:45") && videoPlan.includes("clear microphone audio"),
   no_live_issuance_claim: submission.includes("prepared_not_issued") && submission.includes("does not connect a wallet"),
-  rehearsal_is_labeled: origination.includes("recording fallback") && origination.includes("No API request is made"),
+  rehearsal_is_labeled: origination.includes("Synthetic demo rehearsal") && origination.includes("No API request is made"),
   rehearsal_binds_review_and_issuance: rehearsal.includes("createReviewReceipt") && rehearsal.includes("createSRNIssuancePackage"),
   live_run_clears_old_review: origination.includes("sessionStorage.removeItem(reviewStorageKey(dealId))"),
   live_run_clears_old_issuance: origination.includes("sessionStorage.removeItem(issuanceStorageKey(dealId))"),

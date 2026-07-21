@@ -120,7 +120,7 @@ export function NoteResult({ dealId, fallback }: { dealId: string; fallback: Und
       <IssuancePackagePanel dealId={dealId} dossier={dossier} review={review} />
 
       <div className={`mt-8 flex flex-wrap items-center justify-between gap-4 border p-5 ${issuanceCurrent ? "border-emerald-300/25 bg-emerald-300/10" : "border-amber-300/25 bg-amber-300/10"}`}>
-        <p className="max-w-3xl text-sm leading-6 text-white/70"><strong>{issuanceCurrent ? "Issuance package prepared: " : humanReviewApproved ? "Next control: " : "Issuance blocked: "}</strong>{issuanceCurrent ? "The manifest is linked to the current review receipt and can now appear in the synthetic portfolio." : humanReviewApproved ? "Complete the Day 3 safeguards and prepare the synthetic issuance package above." : issueBlocker}</p>
+        <p className="max-w-3xl text-sm leading-6 text-white/70"><strong>{issuanceCurrent ? "Issuance package prepared: " : humanReviewApproved ? "Next control: " : "Issuance blocked: "}</strong>{issuanceCurrent ? "The manifest is linked to the current review receipt and can now appear in the synthetic portfolio." : humanReviewApproved ? "Complete the issuance safeguards and prepare the synthetic issuance package above." : issueBlocker}</p>
         {issuanceCurrent ? (
           <Link className="bg-white px-6 py-4 text-sm font-black uppercase text-black transition hover:bg-[#0B63FF] hover:text-white" href={`/portfolio/${dealId}`}>View issued-state preview →</Link>
         ) : humanReviewApproved ? (

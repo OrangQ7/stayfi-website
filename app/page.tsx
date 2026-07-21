@@ -255,8 +255,8 @@ export default function Home() {
             stayfi
           </Link>
           <div className="flex items-center gap-3 text-xs font-bold uppercase sm:gap-6">
-            <Link className="hidden text-white/52 transition hover:text-white sm:block" href="/portfolio">Portfolio</Link>
-            <Link className="bg-[#0B63FF] px-4 py-2 text-white transition hover:bg-white hover:text-black" href="/originate">Launch demo</Link>
+            <Link className="hidden text-white/52 transition hover:text-white sm:block" href="/portfolio">Investor view</Link>
+            <Link className="bg-[#0B63FF] px-4 py-2 text-white transition hover:bg-white hover:text-black" href="/originate">Start underwriting</Link>
           </div>
         </nav>
       </header>
@@ -436,8 +436,8 @@ function SeasonalNotesApp({
           </div>
           <p className="max-w-2xl text-base font-bold leading-7 text-white/52 lg:justify-self-end">
             Browse hotel-backed SRNs, inspect PMS-verified seasonal revenue,
-            and simulate a USDC subscription flow. Demo data for product
-            illustration only.
+            and follow an auditable financing workflow. Demo data for product
+            illustration only; no live investment is offered.
           </p>
         </div>
 
@@ -542,18 +542,18 @@ function SeasonalNotesApp({
                   </div>
                 </div>
                 <div className="mt-6 grid gap-3 sm:grid-cols-2">
-                  <button
-                    className="h-12 bg-white px-5 text-sm font-black uppercase text-black transition hover:bg-[#E0FFB3]"
-                    type="button"
+                  <Link
+                    className="flex h-12 items-center justify-center bg-white px-5 text-center text-sm font-black uppercase text-black transition hover:bg-[#E0FFB3]"
+                    href="/originate"
                   >
-                    Simulate subscribe
-                  </button>
-                  <button
-                    className="h-12 border border-white/18 px-5 text-sm font-black uppercase text-white/72 transition hover:border-white/40"
-                    type="button"
+                    Start underwriting
+                  </Link>
+                  <Link
+                    className="flex h-12 items-center justify-center border border-white/18 px-5 text-center text-sm font-black uppercase text-white/72 transition hover:border-white/40 hover:text-white"
+                    href="/underwriting/alpenstern-2026-winter"
                   >
-                    Open data room
-                  </button>
+                    View sample evidence
+                  </Link>
                 </div>
               </div>
             </div>

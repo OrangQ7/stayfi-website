@@ -72,7 +72,7 @@ export function IssuancePackagePanel({
     <section className="mt-8 border border-[#0B63FF]/35 bg-[#0B63FF]/10 p-6 sm:p-7" id="issuance-package">
       <div className="flex flex-wrap items-start justify-between gap-5">
         <div className="max-w-3xl">
-          <p className="text-xs font-black uppercase tracking-[0.12em] text-[#75A7FF]">Day 3 · SRN issuance preparation</p>
+          <p className="text-xs font-black uppercase tracking-[0.12em] text-[#75A7FF]">SRN issuance preparation</p>
           <h2 className="mt-3 text-3xl font-black">Prepare an auditable RWA package.</h2>
           <p className="mt-3 text-sm leading-6 text-white/55">Bind the approved dossier to a synthetic SPV, Base/USDC and ERC-3643 implementation targets, investor eligibility controls, and a proposed revenue lockbox. This prepares evidence; it does not issue a security.</p>
         </div>

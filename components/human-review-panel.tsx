@@ -60,10 +60,10 @@ export function HumanReviewPanel({ dealId, dossier }: { dealId: string; dossier:
   }
 
   return (
-    <section className="mt-8 border border-violet-300/30 bg-violet-300/[0.07] p-6 sm:p-7">
+    <section className="mt-8 scroll-mt-24 border border-violet-300/30 bg-violet-300/[0.07] p-6 sm:p-7" id="human-review">
       <div className="flex flex-wrap items-start justify-between gap-5">
         <div className="max-w-3xl">
-          <p className="text-xs font-black uppercase tracking-[0.12em] text-violet-200">Day 2 · human review control</p>
+          <p className="text-xs font-black uppercase tracking-[0.12em] text-violet-200">Human underwriting approval</p>
           <h2 className="mt-3 text-3xl font-black">The model recommends. A person decides.</h2>
           <p className="mt-3 text-sm leading-6 text-white/55">Review the evidence and record a decision. The receipt fingerprints both the dossier and the review record, and stays in this browser session.</p>
         </div>
